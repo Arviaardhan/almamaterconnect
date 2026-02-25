@@ -1,13 +1,14 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, User, Bell, Menu, X, Trophy } from "lucide-react";
+import { Home, Search, PlusCircle, User, Menu, X, Trophy } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import NotificationDropdown from "@/components/NotificationDropdown";
 
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/explore", icon: Search, label: "Explore" },
   { to: "/create", icon: PlusCircle, label: "Create" },
-  { to: "/dashboard", icon: Bell, label: "Dashboard" },
+  { to: "/dashboard", icon: Trophy, label: "Dashboard" },
   { to: "/profile", icon: User, label: "Profile" },
 ];
 
@@ -46,7 +47,8 @@ export default function Layout() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-2 md:flex">
+            <NotificationDropdown />
             <Link to="/login">
               <Button variant="ghost" size="sm">Log In</Button>
             </Link>
@@ -55,12 +57,15 @@ export default function Layout() {
             </Link>
           </div>
 
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-muted"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <NotificationDropdown />
+            <button
+              className="p-2 rounded-lg hover:bg-muted"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile dropdown */}
