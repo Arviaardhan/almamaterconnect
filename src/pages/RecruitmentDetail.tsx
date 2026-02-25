@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { motion } from "framer-motion";
+import MemberProfileDrawer from "@/components/MemberProfileDrawer";
+import JoinTeamModal from "@/components/JoinTeamModal";
+import { useToast } from "@/hooks/use-toast";
 
 const mockDetail = {
   id: "1",
@@ -18,8 +23,8 @@ const mockDetail = {
     "Present a compelling pitch to judges",
   ],
   members: [
-    { name: "Andi Pratama", role: "Team Lead / UX Researcher", initials: "AP" },
-    { name: "Sarah Chen", role: "Visual Designer", initials: "SC" },
+    { name: "Andi Pratama", role: "Team Lead / UX Researcher", initials: "AP", major: "Information Systems", skills: ["UX Research", "Figma", "Design Thinking"], portfolio: "https://andipratama.design" },
+    { name: "Sarah Chen", role: "Visual Designer", initials: "SC", major: "Visual Communication Design", skills: ["Figma", "Illustration", "Branding"], portfolio: "https://sarahchen.co" },
   ],
   openRoles: [
     { role: "Interaction Designer", skills: ["Figma", "Prototyping", "Animation"], description: "Create micro-interactions and flow transitions" },
@@ -31,6 +36,27 @@ const mockDetail = {
 
 export default function RecruitmentDetail() {
   const { id } = useParams();
+  const { toast } = useToast();
+  const [selectedMember, setSelectedMember] = useState<typeof mockDetail.members[0] | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState<"idle" | "pending">("idle");
+  const [isMember, setIsMember] = useState(false);
+
+  const handleMemberClick = (member: typeof mockDetail.members[0]) => {
+    setSelectedMember(member);
+    setDrawerOpen(true);
+  };
+
+  const handleJoinSubmit = (message: string) => {
+    setJoinModalOpen(false);
+    setApplicationStatus("pending");
+    toast({
+      title: "✅ Application Sent!",
+      description: "The team leader has been notified. Good luck!",
+      className: "border-primary/50 bg-accent",
+    });
+  };
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -38,7 +64,7 @@ export default function RecruitmentDetail() {
         <ArrowLeft className="h-4 w-4" /> Back to Explore
       </Link>
 
-      <div className="animate-fade-in">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         {/* Header */}
         <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -62,9 +88,15 @@ export default function RecruitmentDetail() {
                   <ExternalLink className="h-4 w-4" /> Competition Link
                 </Button>
               </a>
-              <Button size="sm" className="gap-2 shadow-lg shadow-primary/25">
-                <UserPlus className="h-4 w-4" /> Join Team
-              </Button>
+              {applicationStatus === "pending" ? (
+                <Button size="sm" disabled className="gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Pending Approval
+                </Button>
+              ) : (
+                <Button size="sm" className="gap-2 shadow-lg shadow-primary/25" onClick={() => setJoinModalOpen(true)}>
+                  <UserPlus className="h-4 w-4" /> Join Team
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -73,12 +105,12 @@ export default function RecruitmentDetail() {
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {/* Main content */}
           <div className="md:col-span-2 space-y-6">
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-4">About This Project</h2>
               <p className="text-muted-foreground whitespace-pre-line leading-relaxed">{mockDetail.description}</p>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-4">Team Goals</h2>
               <ul className="space-y-3">
                 {mockDetail.goals.map((goal) => (
@@ -88,9 +120,9 @@ export default function RecruitmentDetail() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-4">Open Roles</h2>
               <div className="space-y-4">
                 {mockDetail.openRoles.map((role) => (
@@ -107,16 +139,36 @@ export default function RecruitmentDetail() {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
+
+            {/* Contact section - only visible to members */}
+            {isMember && (
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-primary/30 bg-accent/50 p-6">
+                <h2 className="text-lg font-semibold mb-3">Team Communication</h2>
+                <p className="text-sm text-muted-foreground mb-4">You're part of this team! Connect with your teammates.</p>
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="outline" className="gap-2">
+                    <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                  </Button>
+                  <Button variant="outline" className="gap-2">
+                    <MessageCircle className="h-4 w-4" /> Join Discord
+                  </Button>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-4">Current Team</h2>
               <div className="space-y-4">
                 {mockDetail.members.map((member) => (
-                  <div key={member.name} className="flex items-center gap-3">
+                  <button
+                    key={member.name}
+                    onClick={() => handleMemberClick(member)}
+                    className="flex w-full items-center gap-3 rounded-xl p-2 -m-2 text-left transition-colors hover:bg-muted"
+                  >
                     <Avatar className="h-10 w-10">
                       <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
                         {member.initials}
@@ -126,10 +178,10 @@ export default function RecruitmentDetail() {
                       <p className="text-sm font-medium">{member.name}</p>
                       <p className="text-xs text-muted-foreground">{member.role}</p>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             <div className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-3">Quick Info</h2>
@@ -150,7 +202,10 @@ export default function RecruitmentDetail() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
+
+      <MemberProfileDrawer member={selectedMember} open={drawerOpen} onOpenChange={setDrawerOpen} />
+      <JoinTeamModal open={joinModalOpen} onOpenChange={setJoinModalOpen} teamName={mockDetail.title} onSubmit={handleJoinSubmit} />
     </div>
   );
 }
