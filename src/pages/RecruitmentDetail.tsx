@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2, Crown, Shield } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
@@ -16,6 +16,7 @@ const mockDetail = {
   campus: "Universitas Indonesia",
   deadline: "March 15, 2026",
   competitionLink: "https://hackathon-uiux.id",
+  whatsappLink: "https://chat.whatsapp.com/example-invite-link",
   description: `We're building a healthcare app prototype for the national UI/UX Hackathon 2026. Our goal is to create an intuitive patient management system that helps rural clinics digitize their workflow.\n\nWe're looking for passionate designers and researchers who want to make a real impact. The competition spans 3 days and the top teams win funding for development.`,
   goals: [
     "Create a high-fidelity prototype in Figma",
@@ -23,8 +24,8 @@ const mockDetail = {
     "Present a compelling pitch to judges",
   ],
   members: [
-    { name: "Andi Pratama", role: "Team Lead / UX Researcher", initials: "AP", major: "Information Systems", skills: ["UX Research", "Figma", "Design Thinking"], portfolio: "https://andipratama.design" },
-    { name: "Sarah Chen", role: "Visual Designer", initials: "SC", major: "Visual Communication Design", skills: ["Figma", "Illustration", "Branding"], portfolio: "https://sarahchen.co" },
+    { name: "Andi Pratama", role: "Team Lead / UX Researcher", initials: "AP", major: "Information Systems", skills: ["UX Research", "Figma", "Design Thinking"], portfolio: "https://andipratama.design", isLeader: true },
+    { name: "Sarah Chen", role: "Visual Designer", initials: "SC", major: "Visual Communication Design", skills: ["Figma", "Illustration", "Branding"], portfolio: "https://sarahchen.co", isLeader: false },
   ],
   openRoles: [
     { role: "Interaction Designer", skills: ["Figma", "Prototyping", "Animation"], description: "Create micro-interactions and flow transitions" },
@@ -40,8 +41,8 @@ export default function RecruitmentDetail() {
   const [selectedMember, setSelectedMember] = useState<typeof mockDetail.members[0] | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
-  const [applicationStatus, setApplicationStatus] = useState<"idle" | "pending">("idle");
-  const [isMember, setIsMember] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState<"idle" | "pending" | "joined">("idle");
+  const isMember = applicationStatus === "joined";
 
   const handleMemberClick = (member: typeof mockDetail.members[0]) => {
     setSelectedMember(member);
@@ -74,6 +75,16 @@ export default function RecruitmentDetail() {
                 <Badge className="bg-accent text-accent-foreground border-0">
                   <Users className="mr-1 h-3 w-3" /> {mockDetail.slots} members
                 </Badge>
+                {applicationStatus === "joined" && (
+                  <Badge className="bg-primary text-primary-foreground border-0 gap-1">
+                    <CheckCircle2 className="h-3 w-3" /> Joined
+                  </Badge>
+                )}
+                {applicationStatus === "pending" && (
+                  <Badge variant="secondary" className="gap-1 text-muted-foreground">
+                    <Clock className="h-3 w-3" /> Pending
+                  </Badge>
+                )}
               </div>
               <h1 className="text-2xl font-bold md:text-3xl">{mockDetail.title}</h1>
               <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -91,6 +102,10 @@ export default function RecruitmentDetail() {
               {applicationStatus === "pending" ? (
                 <Button size="sm" disabled className="gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" /> Pending Approval
+                </Button>
+              ) : applicationStatus === "joined" ? (
+                <Button size="sm" disabled className="gap-2 bg-primary/80">
+                  <CheckCircle2 className="h-4 w-4" /> Joined
                 </Button>
               ) : (
                 <Button size="sm" className="gap-2 shadow-lg shadow-primary/25" onClick={() => setJoinModalOpen(true)}>
@@ -141,17 +156,18 @@ export default function RecruitmentDetail() {
               </div>
             </motion.div>
 
-            {/* Contact section - only visible to members */}
-            {isMember && (
+            {/* Contact section - only visible to approved members */}
+            {isMember && mockDetail.whatsappLink && (
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-primary/30 bg-accent/50 p-6">
                 <h2 className="text-lg font-semibold mb-3">Team Communication</h2>
                 <p className="text-sm text-muted-foreground mb-4">You're part of this team! Connect with your teammates.</p>
                 <div className="flex flex-wrap gap-3">
-                  <Button variant="outline" className="gap-2">
-                    <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-                  </Button>
-                  <Button variant="outline" className="gap-2">
-                    <MessageCircle className="h-4 w-4" /> Join Discord
+                  <Button
+                    className="gap-2 text-white"
+                    style={{ backgroundColor: "#25D366" }}
+                    onClick={() => window.open(mockDetail.whatsappLink, "_blank")}
+                  >
+                    <MessageCircle className="h-4 w-4" /> Contact via WhatsApp
                   </Button>
                 </div>
               </motion.div>
@@ -176,6 +192,17 @@ export default function RecruitmentDetail() {
                     </Avatar>
                     <div>
                       <p className="text-sm font-medium">{member.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        {member.isLeader ? (
+                          <Badge variant="outline" className="gap-1 text-[10px] h-5 border-primary/30 text-primary">
+                            <Crown className="h-3 w-3" /> Team Leader
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="gap-1 text-[10px] h-5">
+                            <Shield className="h-3 w-3" /> Member
+                          </Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted-foreground">{member.role}</p>
                     </div>
                   </button>

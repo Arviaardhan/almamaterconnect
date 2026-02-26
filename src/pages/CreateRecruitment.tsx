@@ -25,6 +25,7 @@ export default function CreateRecruitment() {
   const [roles, setRoles] = useState<{ role: string; skills: string[] }[]>([]);
   const [newRole, setNewRole] = useState("");
   const [newSkill, setNewSkill] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
   const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
 
   const addRole = () => {
