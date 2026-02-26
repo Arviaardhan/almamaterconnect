@@ -25,6 +25,7 @@ export default function CreateRecruitment() {
   const [roles, setRoles] = useState<{ role: string; skills: string[] }[]>([]);
   const [newRole, setNewRole] = useState("");
   const [newSkill, setNewSkill] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
   const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
 
   const addRole = () => {
@@ -115,6 +116,11 @@ export default function CreateRecruitment() {
             <div>
               <Label htmlFor="deadline">Registration Deadline</Label>
               <Input id="deadline" type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="mt-1.5" />
+            </div>
+            <div>
+              <Label htmlFor="whatsapp">WhatsApp Group/Contact Link <span className="text-muted-foreground font-normal">(Optional)</span></Label>
+              <Input id="whatsapp" placeholder="https://chat.whatsapp.com/..." value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} className="mt-1.5" />
+              <p className="text-xs text-muted-foreground mt-1">Only visible to approved team members</p>
             </div>
           </div>
         )}

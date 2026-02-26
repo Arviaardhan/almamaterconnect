@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle } from "lucide-react";
+import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import confetti from "canvas-confetti";
 
 const initialRequests = [
   { id: 1, name: "Budi Santoso", initials: "BS", role: "Interaction Designer", skills: ["Figma", "After Effects"], team: "Hackathon UI/UX 2026", time: "1 hour ago", message: "I have 2 years of experience in interaction design and won a design award last year.", major: "Visual Communication Design" },
@@ -22,9 +24,39 @@ const notifications = [
 ];
 
 const initialTeams = [
-  { name: "Hackathon UI/UX 2026", filled: 2, total: 4, status: "Recruiting" },
-  { name: "Web Dev Marathon", filled: 4, total: 4, status: "Full" },
-  { name: "AI Chatbot Competition", filled: 3, total: 4, status: "Recruiting" },
+  {
+    name: "Hackathon UI/UX 2026",
+    filled: 2,
+    total: 4,
+    status: "Recruiting",
+    members: [
+      { name: "You (Andi Pratama)", initials: "AP", role: "Team Leader", isLeader: true },
+      { name: "Sarah Chen", initials: "SC", role: "Member", isLeader: false },
+    ],
+  },
+  {
+    name: "Web Dev Marathon",
+    filled: 4,
+    total: 4,
+    status: "Full",
+    members: [
+      { name: "You (Andi Pratama)", initials: "AP", role: "Team Leader", isLeader: true },
+      { name: "John Doe", initials: "JD", role: "Member", isLeader: false },
+      { name: "Jane Smith", initials: "JS", role: "Member", isLeader: false },
+      { name: "Alex Wong", initials: "AW", role: "Member", isLeader: false },
+    ],
+  },
+  {
+    name: "AI Chatbot Competition",
+    filled: 3,
+    total: 4,
+    status: "Recruiting",
+    members: [
+      { name: "You (Andi Pratama)", initials: "AP", role: "Team Leader", isLeader: true },
+      { name: "Maria Garcia", initials: "MG", role: "Member", isLeader: false },
+      { name: "Tom Lee", initials: "TL", role: "Member", isLeader: false },
+    ],
+  },
 ];
 
 export default function Dashboard() {
@@ -32,20 +64,37 @@ export default function Dashboard() {
   const [teams, setTeams] = useState(initialTeams);
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [removeMember, setRemoveMember] = useState<{ teamName: string; memberName: string } | null>(null);
+  const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { y: 0.6 },
+      colors: ["#10b981", "#34d399", "#6ee7b7", "#a7f3d0"],
+    });
+  };
 
   const handleApprove = (req: typeof initialRequests[0]) => {
     setRequests((prev) => prev.filter((r) => r.id !== req.id));
     setTeams((prev) =>
       prev.map((t) =>
         t.name === req.team && t.filled < t.total
-          ? { ...t, filled: t.filled + 1, status: t.filled + 1 >= t.total ? "Full" : "Recruiting" }
+          ? {
+              ...t,
+              filled: t.filled + 1,
+              status: t.filled + 1 >= t.total ? "Full" : "Recruiting",
+              members: [...t.members, { name: req.name, initials: req.initials, role: "Member", isLeader: false }],
+            }
           : t
       )
     );
+    fireConfetti();
     toast({
-      title: "✅ Member Approved",
-      description: `${req.name} has been added to ${req.team}.`,
+      title: "🎉 Member Successfully Joined!",
+      description: `${req.name} has been added to ${req.team}. The coordination group link has now been shared with them.`,
       className: "border-primary/50 bg-accent",
     });
   };
@@ -53,6 +102,24 @@ export default function Dashboard() {
   const handleDecline = (id: number) => {
     setRequests((prev) => prev.filter((r) => r.id !== id));
     toast({ title: "Request Declined", description: "The applicant has been notified." });
+  };
+
+  const handleRemoveMember = () => {
+    if (!removeMember) return;
+    setTeams((prev) =>
+      prev.map((t) =>
+        t.name === removeMember.teamName
+          ? {
+              ...t,
+              filled: t.filled - 1,
+              status: "Recruiting",
+              members: t.members.filter((m) => m.name !== removeMember.memberName),
+            }
+          : t
+      )
+    );
+    toast({ title: "Member Removed", description: `${removeMember.memberName} has been removed from the team.` });
+    setRemoveMember(null);
   };
 
   const handleViewProfile = (req: typeof initialRequests[0]) => {
@@ -199,10 +266,13 @@ export default function Dashboard() {
         {/* My Teams */}
         <div className="mt-8">
           <h2 className="text-lg font-semibold mb-4">My Teams</h2>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4">
             {teams.map((team) => (
-              <motion.div key={team.name} whileHover={{ scale: 1.02 }}>
-                <Link to="/explore/1" className="group flex items-center justify-between rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-lg">
+              <motion.div key={team.name} className="rounded-2xl border border-border bg-card overflow-hidden">
+                <button
+                  onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
+                  className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted/50"
+                >
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                       <Trophy className="h-5 w-5 text-accent-foreground" />
@@ -216,9 +286,60 @@ export default function Dashboard() {
                     <Badge variant={team.status === "Recruiting" ? "default" : "outline"} className="text-xs">
                       {team.status}
                     </Badge>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
                   </div>
-                </Link>
+                </button>
+
+                <AnimatePresence>
+                  {expandedTeam === team.name && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="border-t border-border px-4 py-3 space-y-2">
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Current Members</p>
+                        {team.members.map((member) => (
+                          <div key={member.name} className="flex items-center justify-between rounded-xl p-2 hover:bg-muted/50">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-8 w-8">
+                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                                  {member.initials}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="text-sm font-medium">{member.name}</p>
+                                <div className="flex items-center gap-1.5">
+                                  {member.isLeader ? (
+                                    <Badge variant="outline" className="gap-1 text-[10px] h-5 border-primary/30 text-primary">
+                                      <Crown className="h-3 w-3" /> Team Leader
+                                    </Badge>
+                                  ) : (
+                                    <Badge variant="outline" className="gap-1 text-[10px] h-5">
+                                      <Shield className="h-3 w-3" /> Member
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            {!member.isLeader && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-7 gap-1 text-xs text-muted-foreground hover:text-destructive"
+                                onClick={() => setRemoveMember({ teamName: team.name, memberName: member.name })}
+                              >
+                                <UserMinus className="h-3 w-3" /> Remove
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
@@ -226,6 +347,24 @@ export default function Dashboard() {
       </motion.div>
 
       <MemberProfileDrawer member={selectedMember} open={drawerOpen} onOpenChange={setDrawerOpen} />
+
+      {/* Remove Member Confirmation */}
+      <Dialog open={!!removeMember} onOpenChange={(open) => !open && setRemoveMember(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Remove Member</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove <span className="font-semibold text-foreground">{removeMember?.memberName}</span> from <span className="font-semibold text-foreground">{removeMember?.teamName}</span>? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRemoveMember(null)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleRemoveMember} className="gap-1">
+              <UserMinus className="h-4 w-4" /> Remove
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
