@@ -1,11 +1,10 @@
-import { UserPlus, Search, Users, Trophy } from "lucide-react";
+import { UserPlus, Search, Users } from "lucide-react";
 import { motion } from "framer-motion";
 
 const steps = [
-  { icon: UserPlus, title: "Register", desc: "Create your profile with skills and campus info" },
-  { icon: Search, title: "Discover", desc: "Browse open teams or post your own recruitment" },
-  { icon: Users, title: "Connect", desc: "Join teams that match your skills and interests" },
-  { icon: Trophy, title: "Win", desc: "Compete together and build your portfolio" },
+  { icon: UserPlus, title: "Build Your Profile", desc: "Sign up and showcase your skills, major, and competition interests." },
+  { icon: Search, title: "Find or Post", desc: "Browse open recruitments or create your own to attract the right teammates." },
+  { icon: Users, title: "Join & Collaborate", desc: "Get accepted, access the team's WhatsApp link, and start winning together." },
 ];
 
 export default function HowItWorks() {
@@ -19,9 +18,9 @@ export default function HowItWorks() {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl font-bold md:text-4xl">How It Works</h2>
-          <p className="mt-3 text-muted-foreground">Four simple steps to your next winning team</p>
+          <p className="mt-3 text-muted-foreground">Three simple steps to your next winning team</p>
         </motion.div>
-        <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto mt-14 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-3">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}

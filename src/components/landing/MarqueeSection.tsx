@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
-const competitions = [
-  "Gemastik", "PKM", "Imagine Cup", "Google Solution Challenge",
-  "FIND IT", "Compfest", "Technoscape", "BizCase National",
-  "Hacktiv8 Hackathon", "IEEE Xtreme", "ICPC", "Data Summit",
+const categories = [
+  "Hackathon", "Business Case", "Data Science", "UI/UX Design",
+  "Robotics", "IoT", "Mobile Development", "Web Development",
+  "AI & Machine Learning", "Cybersecurity", "Game Development", "Research Paper",
 ];
 
 function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
@@ -14,7 +14,7 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
         animate={{ x: reverse ? ["0%", "-50%"] : ["-50%", "0%"] }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
-        {[...competitions, ...competitions].map((name, i) => (
+        {[...categories, ...categories].map((name, i) => (
           <div
             key={i}
             className="glass-card whitespace-nowrap rounded-xl px-5 py-2.5 text-sm font-medium text-muted-foreground"
@@ -37,7 +37,7 @@ export default function MarqueeSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Trusted by students competing in
+          Supported Competition Categories
         </motion.p>
       </div>
       <div className="space-y-3">
