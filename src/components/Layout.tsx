@@ -7,6 +7,7 @@ import NotificationDropdown from "@/components/NotificationDropdown";
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/explore", icon: Search, label: "Explore" },
+  { to: "/discover-users", icon: Users, label: "Talent" },
   { to: "/create", icon: PlusCircle, label: "Create" },
   { to: "/dashboard", icon: Trophy, label: "Dashboard" },
   { to: "/profile", icon: User, label: "Profile" },
