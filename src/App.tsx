@@ -10,6 +10,7 @@ import RecruitmentDetail from "./pages/RecruitmentDetail";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import CreateRecruitment from "./pages/CreateRecruitment";
+import DiscoverTalent from "./pages/DiscoverTalent";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
