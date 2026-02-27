@@ -1,60 +1,42 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { Users, Trophy, Briefcase, GraduationCap } from "lucide-react";
+import { motion } from "framer-motion";
+import { ShieldCheck, Layers, MessageCircle, LayoutDashboard } from "lucide-react";
 
-const stats = [
-  { value: 500, suffix: "+", label: "Active Students", icon: Users },
-  { value: 120, suffix: "+", label: "Teams Formed", icon: GraduationCap },
-  { value: 45, suffix: "+", label: "Competitions", icon: Trophy },
-  { value: 30, suffix: "+", label: "Campuses", icon: Briefcase },
+const features = [
+  { icon: ShieldCheck, title: "Campus-Verified", desc: "Students register with their campus identity for trusted collaboration." },
+  { icon: Layers, title: "Diverse Skillsets", desc: "Find teammates across disciplines — tech, business, design, and more." },
+  { icon: MessageCircle, title: "Direct Coordination", desc: "Once matched, coordinate instantly via WhatsApp group links." },
+  { icon: LayoutDashboard, title: "Centralized Dashboard", desc: "Manage your teams, applications, and recruitment from one place." },
 ];
-
-function CountUp({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const duration = 1500;
-    const step = Math.ceil(target / (duration / 16));
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(start);
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, target]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-}
 
 export default function StatsSection() {
   return (
     <section className="py-16 border-t border-border">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          {stats.map((stat, i) => (
+        <motion.div
+          className="text-center mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-bold md:text-4xl">Core Features</h2>
+          <p className="mt-3 text-muted-foreground">Everything you need to build a winning team</p>
+        </motion.div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
+          {features.map((f, i) => (
             <motion.div
-              key={stat.label}
-              className="glass-card rounded-2xl p-6 text-center"
+              key={f.title}
+              className="glass-card rounded-2xl p-6 text-center hover-glow"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.1 }}
+              whileHover={{ scale: 1.03 }}
             >
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-primary mb-3">
-                <stat.icon className="h-5 w-5" />
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-primary mb-4">
+                <f.icon className="h-6 w-6" />
               </div>
-              <p className="text-3xl font-extrabold text-primary tracking-tight md:text-4xl">
-                <CountUp target={stat.value} suffix={stat.suffix} />
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+              <h3 className="text-base font-semibold">{f.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
