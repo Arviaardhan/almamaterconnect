@@ -8,12 +8,15 @@ import FooterSection from "@/components/landing/FooterSection";
 
 export default function Landing() {
   return (
-    <div className="overflow-hidden custom-scrollbar">
+    <div className="overflow-hidden custom-scrollbar space-y-0">
       <HeroSection />
       <MarqueeSection />
+      <div className="py-4" />
       <StatsSection />
       <HowItWorks />
+      <div className="py-4" />
       <FeaturedCompetitions />
+      <div className="py-4" />
       <CTASection />
       <FooterSection />
     </div>
