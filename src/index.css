@@ -166,4 +166,11 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--slate-blue) / 0.5);
   }
+
+  .btn-press {
+    @apply transition-transform duration-100;
+  }
+  .btn-press:active {
+    transform: scale(0.96);
+  }
 }
