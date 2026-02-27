@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, User, Menu, X, Trophy } from "lucide-react";
+import { Home, Search, PlusCircle, User, Menu, X, Trophy, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import NotificationDropdown from "@/components/NotificationDropdown";
