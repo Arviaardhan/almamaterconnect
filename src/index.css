@@ -48,6 +48,9 @@
     --emerald-glow: 160 84% 45%;
     --slate-blue: 230 70% 62%;
     --slate-blue-light: 230 70% 95%;
+    --footer-bg: 225 25% 14%;
+    --footer-foreground: 220 15% 80%;
+    --footer-muted: 220 15% 50%;
     --success: 160 84% 39%;
     --warning: 38 92% 50%;
     --info: 230 70% 62%;
@@ -94,6 +97,9 @@
     --emerald-glow: 160 84% 50%;
     --slate-blue: 230 70% 65%;
     --slate-blue-light: 230 30% 18%;
+    --footer-bg: 225 25% 10%;
+    --footer-foreground: 220 15% 80%;
+    --footer-muted: 220 15% 45%;
     --success: 160 84% 45%;
     --warning: 38 92% 55%;
     --info: 230 70% 65%;
@@ -159,5 +165,12 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--slate-blue) / 0.5);
+  }
+
+  .btn-press {
+    @apply transition-transform duration-100;
+  }
+  .btn-press:active {
+    transform: scale(0.96);
   }
 }
