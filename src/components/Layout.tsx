@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, User, Menu, X, Trophy } from "lucide-react";
+import { Home, Search, PlusCircle, User, Menu, X, Trophy, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import NotificationDropdown from "@/components/NotificationDropdown";
@@ -7,6 +7,7 @@ import NotificationDropdown from "@/components/NotificationDropdown";
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/explore", icon: Search, label: "Explore" },
+  { to: "/discover-users", icon: Users, label: "Talent" },
   { to: "/create", icon: PlusCircle, label: "Create" },
   { to: "/dashboard", icon: Trophy, label: "Dashboard" },
   { to: "/profile", icon: User, label: "Profile" },
