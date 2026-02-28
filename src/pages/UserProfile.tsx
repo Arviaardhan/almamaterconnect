@@ -69,8 +69,8 @@ export default function UserProfile() {
               </div>
             </div>
             <div className="flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" asChild>
-                <a href={`mailto:contact@example.com`}><Mail className="h-4 w-4 mr-1.5" />Contact</a>
+              <Button variant="outline" size="sm" onClick={() => setContactOpen(true)}>
+                <Mail className="h-4 w-4 mr-1.5" />Contact
               </Button>
               <Button size="sm" onClick={() => setInviteOpen(true)}>
                 <Users className="h-4 w-4 mr-1.5" />Invite to Team
