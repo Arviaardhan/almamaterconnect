@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import { ExternalLink, GraduationCap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MemberProfile {
+  id?: number;
   name: string;
   initials: string;
   role: string;
@@ -55,6 +57,13 @@ function MemberContent({ member }: { member: MemberProfile }) {
             <ExternalLink className="h-4 w-4" /> View Portfolio
           </Button>
         </a>
+      )}
+      {member.id && (
+        <Link to={`/profile/${member.id}`}>
+          <Button variant="outline" className="gap-2 mt-1">
+            <ExternalLink className="h-4 w-4" /> View Full Profile
+          </Button>
+        </Link>
       )}
     </div>
   );

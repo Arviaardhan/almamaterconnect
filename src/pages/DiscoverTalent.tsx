@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Search, SlidersHorizontal, Github, Linkedin, Users, FolderKanban, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -286,9 +287,9 @@ export default function DiscoverTalent() {
                         {/* Actions */}
                         <div className="mt-4 flex gap-2">
                           <Button variant="outline" size="sm" className="flex-1 text-xs" asChild>
-                            <a href={`/profile/${user.id}`}>
+                            <Link to={`/profile/${user.id}`}>
                               <ExternalLink className="h-3 w-3 mr-1" /> View Profile
-                            </a>
+                            </Link>
                           </Button>
                           <Button size="sm" className="flex-1 text-xs" onClick={() => setInviteUser(user)}>
                             Invite to Team
