@@ -29,6 +29,7 @@ export default function UserProfile() {
   const { id } = useParams();
   const user = mockUsers[Number(id)];
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   if (!user) {
     return (
