@@ -8,6 +8,7 @@ import { ExternalLink, GraduationCap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MemberProfile {
+  id?: number;
   name: string;
   initials: string;
   role: string;
