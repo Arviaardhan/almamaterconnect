@@ -180,6 +180,11 @@ export default function UserProfile() {
         onOpenChange={setInviteOpen}
         targetUser={inviteTarget}
       />
+      <ContactModal
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+        user={{ name: user.name, phone: user.phone, email: user.email }}
+      />
     </div>
   );
 }
