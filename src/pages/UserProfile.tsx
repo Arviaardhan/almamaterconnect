@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ExternalLink, Github, Linkedin, Mail, Trophy, Users, FolderKanban, BookOpen, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import InviteToTeamModal from "@/components/InviteToTeamModal";
+import ContactModal from "@/components/ContactModal";
 
 const mockUsers: Record<number, {
   id: number; name: string; initials: string; institution: string; major: string;
