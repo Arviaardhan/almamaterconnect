@@ -11,7 +11,7 @@ import ContactModal from "@/components/ContactModal";
 const mockUsers: Record<number, {
   id: number; name: string; initials: string; institution: string; major: string;
   bio: string; skills: string[]; teamsJoined: number; projectsCompleted: number;
-  github: string | null; linkedin: string | null;
+  github: string | null; linkedin: string | null; phone: string | null; email: string;
   teams: { name: string; role: string; status: string }[];
   projects: { name: string; description: string }[];
 }> = {
