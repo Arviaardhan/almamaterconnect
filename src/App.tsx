@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import Explore from "./pages/Explore";
 import RecruitmentDetail from "./pages/RecruitmentDetail";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import Dashboard from "./pages/Dashboard";
 import CreateRecruitment from "./pages/CreateRecruitment";
 import DiscoverTalent from "./pages/DiscoverTalent";
