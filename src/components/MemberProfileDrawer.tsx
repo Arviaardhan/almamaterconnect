@@ -58,6 +58,13 @@ function MemberContent({ member }: { member: MemberProfile }) {
           </Button>
         </a>
       )}
+      {member.id && (
+        <Link to={`/profile/${member.id}`}>
+          <Button variant="outline" className="gap-2 mt-1">
+            <ExternalLink className="h-4 w-4" /> View Full Profile
+          </Button>
+        </Link>
+      )}
     </div>
   );
 }
