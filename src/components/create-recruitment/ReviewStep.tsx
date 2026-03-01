@@ -17,6 +17,9 @@ const categoryMap: Record<string, string> = {
   data: "Data Science",
   business: "Business Case",
   iot: "IoT / Hardware",
+  debate: "Debate",
+  research: "Research / Academic",
+  creative: "Creative / Multimedia",
 };
 
 export default function ReviewStep(props: ReviewStepProps) {
