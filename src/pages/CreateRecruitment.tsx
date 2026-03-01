@@ -4,15 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, Plus, X, CheckCircle2, Trophy, FileText, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Plus, X, CheckCircle2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import StepIndicator from "@/components/create-recruitment/StepIndicator";
+import ReviewStep from "@/components/create-recruitment/ReviewStep";
 
-const stepLabels = [
-  { icon: Trophy, label: "Competition" },
-  { icon: FileText, label: "Details" },
-  { icon: Users, label: "Roles" },
-];
+const DESC_MAX = 500;
+
+function isValidUrl(val: string) {
+  return !val || /^https?:\/\/.+/i.test(val);
+}
 
 export default function CreateRecruitment() {
   const navigate = useNavigate();
@@ -27,6 +29,26 @@ export default function CreateRecruitment() {
   const [newSkill, setNewSkill] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
   const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = (s: number): boolean => {
+    const e: Record<string, string> = {};
+    if (s === 0) {
+      if (!title.trim()) e.title = "This field is required";
+      if (!category) e.category = "This field is required";
+      if (link && !isValidUrl(link)) e.link = "Must start with http:// or https://";
+      if (whatsappLink && !isValidUrl(whatsappLink)) e.whatsappLink = "Must start with http:// or https://";
+    }
+    if (s === 1) {
+      if (!description.trim()) e.description = "This field is required";
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const goNext = () => {
+    if (validate(step)) setStep(step + 1);
+  };
 
   const addRole = () => {
     if (newRole.trim()) {
@@ -56,47 +78,27 @@ export default function CreateRecruitment() {
     setRoles(updated);
   };
 
-  const handleSubmit = () => {
-    // Mock submit
-    navigate("/explore");
-  };
+  const handleSubmit = () => navigate("/explore");
+
+  const fieldClass = (key: string) => errors[key] ? "border-destructive" : "";
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">Create Recruitment</h1>
       <p className="text-muted-foreground mb-8">Post a new team search for your competition</p>
 
-      {/* Progress Steps */}
-      <div className="mb-10 flex items-center justify-between">
-        {stepLabels.map((s, i) => (
-          <div key={s.label} className="flex items-center gap-3">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors ${
-              i <= step ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground"
-            }`}>
-              {i < step ? <CheckCircle2 className="h-5 w-5" /> : <s.icon className="h-5 w-5" />}
-            </div>
-            <span className={`hidden text-sm font-medium sm:block ${i <= step ? "text-foreground" : "text-muted-foreground"}`}>
-              {s.label}
-            </span>
-            {i < stepLabels.length - 1 && (
-              <div className={`mx-2 h-px w-8 sm:w-16 ${i < step ? "bg-primary" : "bg-border"}`} />
-            )}
-          </div>
-        ))}
-      </div>
+      <StepIndicator currentStep={step} />
 
       <div className="animate-fade-in rounded-2xl border border-border bg-card p-6 md:p-8">
         {/* Step 1: Competition Info */}
         {step === 0 && (
           <div className="space-y-5">
-            <div>
-              <Label htmlFor="title">Competition Title *</Label>
-              <Input id="title" placeholder="e.g., Hackathon UI/UX 2026" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1.5" />
-            </div>
-            <div>
-              <Label htmlFor="category">Category *</Label>
+            <Field label="Competition Title *" error={errors.title}>
+              <Input placeholder="e.g., Hackathon UI/UX 2026" value={title} onChange={(e) => setTitle(e.target.value)} className={fieldClass("title")} />
+            </Field>
+            <Field label="Category *" error={errors.category}>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="mt-1.5">
+                <SelectTrigger className={fieldClass("category")}>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -108,36 +110,33 @@ export default function CreateRecruitment() {
                   <SelectItem value="iot">IoT / Hardware</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div>
-              <Label htmlFor="link">Competition Link</Label>
-              <Input id="link" placeholder="https://..." value={link} onChange={(e) => setLink(e.target.value)} className="mt-1.5" />
-            </div>
-            <div>
-              <Label htmlFor="deadline">Registration Deadline</Label>
-              <Input id="deadline" type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="mt-1.5" />
-            </div>
-            <div>
-              <Label htmlFor="whatsapp">WhatsApp Group/Contact Link <span className="text-muted-foreground font-normal">(Optional)</span></Label>
-              <Input id="whatsapp" placeholder="https://chat.whatsapp.com/..." value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} className="mt-1.5" />
-              <p className="text-xs text-muted-foreground mt-1">Only visible to approved team members</p>
-            </div>
+            </Field>
+            <Field label="Competition Link" error={errors.link}>
+              <Input placeholder="https://..." value={link} onChange={(e) => setLink(e.target.value)} className={fieldClass("link")} />
+            </Field>
+            <Field label="Registration Deadline">
+              <Input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+            </Field>
+            <Field label="WhatsApp Group/Contact Link" hint="Only visible to approved team members" error={errors.whatsappLink}>
+              <Input placeholder="https://chat.whatsapp.com/..." value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} className={fieldClass("whatsappLink")} />
+            </Field>
           </div>
         )}
 
         {/* Step 2: Description */}
         {step === 1 && (
           <div className="space-y-5">
-            <div>
-              <Label htmlFor="desc">Project Description *</Label>
+            <Field label="Project Description *" error={errors.description}>
               <Textarea
-                id="desc"
                 placeholder="Describe your project, what you're building, and what makes it exciting..."
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="mt-1.5 min-h-[180px]"
+                onChange={(e) => setDescription(e.target.value.slice(0, DESC_MAX))}
+                className={`min-h-[180px] ${fieldClass("description")}`}
               />
-            </div>
+              <p className={`text-xs mt-1 text-right ${description.length >= DESC_MAX ? "text-destructive" : "text-muted-foreground"}`}>
+                {description.length}/{DESC_MAX}
+              </p>
+            </Field>
             <p className="text-xs text-muted-foreground">
               Tip: Include your team's vision, the problem you're solving, and what you hope to achieve.
             </p>
@@ -149,7 +148,7 @@ export default function CreateRecruitment() {
           <div className="space-y-5">
             <div>
               <Label>Needed Roles</Label>
-              <p className="text-sm text-muted-foreground mt-1">Add the roles you're looking to fill</p>
+              <p className="text-sm text-muted-foreground mt-1">Add the roles you're looking to fill and their required skills</p>
             </div>
 
             {roles.map((role, i) => (
@@ -168,10 +167,10 @@ export default function CreateRecruitment() {
                     </Badge>
                   ))}
                 </div>
-                {editingRoleIndex === i && (
+                {editingRoleIndex === i ? (
                   <div className="mt-3 flex gap-2">
                     <Input
-                      placeholder="Add a skill..."
+                      placeholder="Add a skill (e.g. React, Python)..."
                       value={newSkill}
                       onChange={(e) => setNewSkill(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addSkillToRole(i)}
@@ -179,8 +178,7 @@ export default function CreateRecruitment() {
                     />
                     <Button size="sm" variant="outline" onClick={() => addSkillToRole(i)}>Add</Button>
                   </div>
-                )}
-                {editingRoleIndex !== i && (
+                ) : (
                   <button
                     onClick={() => setEditingRoleIndex(i)}
                     className="mt-2 text-xs text-primary hover:underline"
@@ -205,6 +203,19 @@ export default function CreateRecruitment() {
           </div>
         )}
 
+        {/* Step 4: Review */}
+        {step === 3 && (
+          <ReviewStep
+            title={title}
+            category={category}
+            link={link}
+            deadline={deadline}
+            whatsappLink={whatsappLink}
+            description={description}
+            roles={roles}
+          />
+        )}
+
         {/* Navigation */}
         <div className="mt-8 flex justify-between">
           <Button
@@ -215,8 +226,8 @@ export default function CreateRecruitment() {
           >
             <ArrowLeft className="h-4 w-4" /> Back
           </Button>
-          {step < 2 ? (
-            <Button onClick={() => setStep(step + 1)} className="gap-2">
+          {step < 3 ? (
+            <Button onClick={goNext} className="gap-2">
               Next <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
@@ -226,6 +237,17 @@ export default function CreateRecruitment() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <div className="mt-1.5">{children}</div>
+      {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}
+      {error && <p className="text-xs text-destructive mt-1">{error}</p>}
     </div>
   );
 }
