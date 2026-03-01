@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,30 @@ import StepIndicator from "@/components/create-recruitment/StepIndicator";
 import ReviewStep from "@/components/create-recruitment/ReviewStep";
 
 const DESC_MAX = 500;
+
+const categories = [
+  { value: "web", label: "Web Development" },
+  { value: "mobile", label: "Mobile Development" },
+  { value: "design", label: "UI/UX Design" },
+  { value: "data", label: "Data Science" },
+  { value: "business", label: "Business Case" },
+  { value: "iot", label: "IoT / Hardware" },
+  { value: "debate", label: "Debate" },
+  { value: "research", label: "Research / Academic" },
+  { value: "creative", label: "Creative / Multimedia" },
+];
+
+const competitionSuggestions: Record<string, string[]> = {
+  web: ["Hackathon UI/UX 2026", "Google Solution Challenge", "BINUS Hackathon", "Compfest Hackaday"],
+  mobile: ["Flutter Forward Extended", "Apple Developer Academy Challenge", "Google Developer Student Clubs"],
+  design: ["UXTopia Design Sprint", "Figma Design Jam", "Adobe Creative Jam"],
+  data: ["Kaggle Competition", "Data Mining Cup", "BRI Data Hackathon"],
+  business: ["L'Oréal Brandstorm", "Unilever Future Leaders", "Shell NXplorers", "SBM ITB Business Case"],
+  iot: ["IoT Maker Challenge", "Intel IoT Hackathon", "Embedded Systems Competition"],
+  debate: ["NUDC", "Asian Parliamentary Debate", "World Schools Debating Championship"],
+  research: ["LKTI Nasional", "PIMNAS", "Student Research Symposium"],
+  creative: ["Film Pendek Mahasiswa", "Lomba Poster Ilmiah", "Creative Campaign Challenge"],
+};
 
 function isValidUrl(val: string) {
   return !val || /^https?:\/\/.+/i.test(val);
@@ -30,6 +54,14 @@ export default function CreateRecruitment() {
   const [whatsappLink, setWhatsappLink] = useState("");
   const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
+  const titleRef = useRef<HTMLDivElement>(null);
+
+  const titleSuggestions = category
+    ? (competitionSuggestions[category] || []).filter(
+        (s) => s.toLowerCase().includes(title.toLowerCase())
+      )
+    : [];
 
   const validate = (s: number): boolean => {
     const e: Record<string, string> = {};
@@ -93,23 +125,51 @@ export default function CreateRecruitment() {
         {/* Step 1: Competition Info */}
         {step === 0 && (
           <div className="space-y-5">
-            <Field label="Competition Title *" error={errors.title}>
-              <Input placeholder="e.g., Hackathon UI/UX 2026" value={title} onChange={(e) => setTitle(e.target.value)} className={fieldClass("title")} />
-            </Field>
             <Field label="Category *" error={errors.category}>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={category} onValueChange={(v) => { setCategory(v); setTitle(""); }}>
                 <SelectTrigger className={fieldClass("category")}>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="web">Web Development</SelectItem>
-                  <SelectItem value="mobile">Mobile Development</SelectItem>
-                  <SelectItem value="design">UI/UX Design</SelectItem>
-                  <SelectItem value="data">Data Science</SelectItem>
-                  <SelectItem value="business">Business Case</SelectItem>
-                  <SelectItem value="iot">IoT / Hardware</SelectItem>
+                  {categories.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+            </Field>
+            <Field label="Competition Title *" error={errors.title}>
+              <div className="relative" ref={titleRef}>
+                <Input
+                  placeholder="e.g., Hackathon UI/UX 2026"
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                    setShowTitleSuggestions(true);
+                  }}
+                  onFocus={() => setShowTitleSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowTitleSuggestions(false), 150)}
+                  className={fieldClass("title")}
+                />
+                {showTitleSuggestions && titleSuggestions.length > 0 && title.length > 0 && (
+                  <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-popover p-1 shadow-md">
+                    {titleSuggestions.slice(0, 5).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        onMouseDown={(e) => { e.preventDefault(); setTitle(s); setShowTitleSuggestions(false); }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {category && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Type to see suggestions, or enter your own competition name.
+                  </p>
+                )}
+              </div>
             </Field>
             <Field label="Competition Link" error={errors.link}>
               <Input placeholder="https://..." value={link} onChange={(e) => setLink(e.target.value)} className={fieldClass("link")} />
@@ -148,7 +208,7 @@ export default function CreateRecruitment() {
           <div className="space-y-5">
             <div>
               <Label>Needed Roles</Label>
-              <p className="text-sm text-muted-foreground mt-1">Add the roles you're looking to fill and their required skills</p>
+              <p className="text-sm text-muted-foreground mt-1">Define each role and add required skill tags</p>
             </div>
 
             {roles.map((role, i) => (
@@ -191,7 +251,7 @@ export default function CreateRecruitment() {
 
             <div className="flex gap-2">
               <Input
-                placeholder="e.g., Frontend Developer"
+                placeholder="e.g., Lead Researcher, UI Designer..."
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && addRole()}
@@ -200,6 +260,9 @@ export default function CreateRecruitment() {
                 <Plus className="h-4 w-4" /> Add Role
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">
+              Define any role name — e.g., "Lead Researcher", "Debater", "Frontend Dev" — then add specific skill requirements.
+            </p>
           </div>
         )}
 
