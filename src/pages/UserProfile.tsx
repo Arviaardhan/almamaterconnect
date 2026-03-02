@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { ExternalLink, Github, Linkedin, Mail, Trophy, Users, FolderKanban, BookOpen, ArrowLeft, Medal, Award } from "lucide-react";
