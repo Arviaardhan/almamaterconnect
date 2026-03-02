@@ -158,9 +158,67 @@ export default function UserProfile() {
                 ))}
               </div>
             </div>
-          </div>
 
-          {/* Right Column - Projects */}
+            {/* Competition History */}
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-foreground">
+                <Medal className="h-5 w-5 text-primary" /> Competition History
+              </h2>
+
+              {/* Stats row */}
+              <div className="grid grid-cols-2 gap-4 mb-5">
+                <div className="rounded-xl bg-muted/50 p-4 text-center">
+                  <p className="text-2xl font-bold text-primary">{user.competitionHistory.totalParticipated}</p>
+                  <p className="text-xs text-muted-foreground">Competitions</p>
+                </div>
+                <div className="rounded-xl bg-lime/10 border border-lime/30 p-4 text-center">
+                  <p className="text-2xl font-bold text-lime">{user.competitionHistory.wins}</p>
+                  <p className="text-xs text-muted-foreground">Wins / Podiums</p>
+                </div>
+              </div>
+
+              {/* Win rate */}
+              <div className="mb-5">
+                <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+                  <span>Win Rate</span>
+                  <span>{Math.round((user.competitionHistory.wins / user.competitionHistory.totalParticipated) * 100)}%</span>
+                </div>
+                <Progress value={(user.competitionHistory.wins / user.competitionHistory.totalParticipated) * 100} className="h-2 bg-muted [&>div]:bg-lime" />
+              </div>
+
+              {/* Participation list */}
+              <div className="space-y-2.5">
+                {user.competitionHistory.participations.map((p) => (
+                  <div key={p.name} className="flex items-center justify-between rounded-xl border border-border p-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
+                        <Trophy className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm text-foreground">{p.name}</p>
+                        <p className="text-xs text-muted-foreground">{p.year}</p>
+                      </div>
+                    </div>
+                    <Badge
+                      className={
+                        p.result === "Winner"
+                          ? "bg-lime text-lime-foreground border-0 font-bold text-xs"
+                          : p.result === "Runner-Up"
+                          ? "bg-warning/15 text-warning border-warning/30 text-xs"
+                          : p.result === "Finalist"
+                          ? "bg-secondary/15 text-secondary border-secondary/30 text-xs"
+                          : "text-xs"
+                      }
+                      variant={p.result === "Winner" || p.result === "Runner-Up" || p.result === "Finalist" ? "default" : "outline"}
+                    >
+                      {p.result === "Winner" && <Award className="h-3 w-3 mr-1" />}
+                      {p.result}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           <div>
             <div className="rounded-2xl border border-border bg-card p-6">
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-foreground">
