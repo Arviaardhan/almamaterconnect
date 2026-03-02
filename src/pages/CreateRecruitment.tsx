@@ -177,8 +177,11 @@ export default function CreateRecruitment() {
             <Field label="Registration Deadline">
               <Input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
             </Field>
-            <Field label="WhatsApp Group/Contact Link" hint="Only visible to approved team members" error={errors.whatsappLink}>
+    <Field label="WhatsApp Group/Contact Link" hint="Only visible to approved team members" error={errors.whatsappLink}>
               <Input placeholder="https://chat.whatsapp.com/..." value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} className={fieldClass("whatsappLink")} />
+            </Field>
+            <Field label="Guidebook / Resource Link" hint="Provide a link to the competition rules or guidebook for your team." error={errors.resourceLink}>
+              <Input placeholder="e.g., Google Drive or Dropbox link" value={resourceLink} onChange={(e) => setResourceLink(e.target.value)} className={fieldClass("resourceLink")} />
             </Field>
           </div>
         )}
