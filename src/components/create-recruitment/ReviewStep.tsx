@@ -35,6 +35,7 @@ export default function ReviewStep(props: ReviewStepProps) {
         {props.link && <Section label="Competition Link" value={props.link} isLink />}
         {props.deadline && <Section label="Registration Deadline" value={props.deadline} />}
         {props.whatsappLink && <Section label="WhatsApp Link" value={props.whatsappLink} isLink />}
+        {props.resourceLink && <Section label="Guidebook / Resource Link" value={props.resourceLink} isLink />}
 
         <div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Project Description</p>

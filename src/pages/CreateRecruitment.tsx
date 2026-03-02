@@ -279,6 +279,7 @@ export default function CreateRecruitment() {
             link={link}
             deadline={deadline}
             whatsappLink={whatsappLink}
+            resourceLink={resourceLink}
             description={description}
             roles={roles}
           />
