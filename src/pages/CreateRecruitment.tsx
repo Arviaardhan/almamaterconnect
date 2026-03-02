@@ -71,6 +71,7 @@ export default function CreateRecruitment() {
       if (!category) e.category = "This field is required";
       if (link && !isValidUrl(link)) e.link = "Must start with http:// or https://";
       if (whatsappLink && !isValidUrl(whatsappLink)) e.whatsappLink = "Must start with http:// or https://";
+      if (resourceLink && !isValidUrl(resourceLink)) e.resourceLink = "Must start with http:// or https://";
     }
     if (s === 1) {
       if (!description.trim()) e.description = "This field is required";
