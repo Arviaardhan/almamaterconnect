@@ -37,6 +37,7 @@ const mockDetail = {
     { competition: "UI/UX Design Sprint 2025", result: "Winner", year: 2025 },
     { competition: "Campus Design Challenge", result: "Runner-Up", year: 2024 },
   ],
+  resourceLink: "https://drive.google.com/example-guidebook",
   resources: [
     { name: "Competition Rulebook 2026.pdf", type: "pdf", url: "#" },
     { name: "Design System Guidelines", type: "link", url: "https://designsystem.guide" },
@@ -216,7 +217,23 @@ export default function RecruitmentDetail() {
               )}
             </motion.div>
 
-            {/* Resources / Competition Guides */}
+            {/* Competition Resources Card */}
+            {mockDetail.resourceLink && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }} className="rounded-2xl border-2 border-lime/40 bg-card p-6">
+                <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-lime" /> Competition Resources
+                </h2>
+                <p className="text-sm text-muted-foreground mb-4">Access the official guidebook and competition rules shared by the team leader.</p>
+                <a href={mockDetail.resourceLink} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="w-full gap-3 h-14 text-base border-lime/40 hover:bg-lime/10 hover:border-lime">
+                    <ExternalLink className="h-5 w-5 text-lime" />
+                    Open Guidebook
+                  </Button>
+                </a>
+              </motion.div>
+            )}
+
+            {/* Additional Resources / Guides */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-2xl border border-lime/30 bg-card p-6">
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-lime" /> Resources & Guides

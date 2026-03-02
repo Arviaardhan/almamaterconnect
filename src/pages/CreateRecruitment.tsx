@@ -52,6 +52,7 @@ export default function CreateRecruitment() {
   const [newRole, setNewRole] = useState("");
   const [newSkill, setNewSkill] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
+  const [resourceLink, setResourceLink] = useState("");
   const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
@@ -70,6 +71,7 @@ export default function CreateRecruitment() {
       if (!category) e.category = "This field is required";
       if (link && !isValidUrl(link)) e.link = "Must start with http:// or https://";
       if (whatsappLink && !isValidUrl(whatsappLink)) e.whatsappLink = "Must start with http:// or https://";
+      if (resourceLink && !isValidUrl(resourceLink)) e.resourceLink = "Must start with http:// or https://";
     }
     if (s === 1) {
       if (!description.trim()) e.description = "This field is required";
@@ -177,8 +179,11 @@ export default function CreateRecruitment() {
             <Field label="Registration Deadline">
               <Input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
             </Field>
-            <Field label="WhatsApp Group/Contact Link" hint="Only visible to approved team members" error={errors.whatsappLink}>
+    <Field label="WhatsApp Group/Contact Link" hint="Only visible to approved team members" error={errors.whatsappLink}>
               <Input placeholder="https://chat.whatsapp.com/..." value={whatsappLink} onChange={(e) => setWhatsappLink(e.target.value)} className={fieldClass("whatsappLink")} />
+            </Field>
+            <Field label="Guidebook / Resource Link" hint="Provide a link to the competition rules or guidebook for your team." error={errors.resourceLink}>
+              <Input placeholder="e.g., Google Drive or Dropbox link" value={resourceLink} onChange={(e) => setResourceLink(e.target.value)} className={fieldClass("resourceLink")} />
             </Field>
           </div>
         )}
@@ -274,6 +279,7 @@ export default function CreateRecruitment() {
             link={link}
             deadline={deadline}
             whatsappLink={whatsappLink}
+            resourceLink={resourceLink}
             description={description}
             roles={roles}
           />
