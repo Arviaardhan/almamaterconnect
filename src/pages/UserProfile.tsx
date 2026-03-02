@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { ExternalLink, Github, Linkedin, Mail, Trophy, Users, FolderKanban, BookOpen, ArrowLeft } from "lucide-react";
+import { ExternalLink, Github, Linkedin, Mail, Trophy, Users, FolderKanban, BookOpen, ArrowLeft, Medal, Award } from "lucide-react";
 import { useState } from "react";
 import InviteToTeamModal from "@/components/InviteToTeamModal";
 import ContactModal from "@/components/ContactModal";
