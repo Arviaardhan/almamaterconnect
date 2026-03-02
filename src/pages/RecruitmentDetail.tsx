@@ -33,6 +33,15 @@ const mockDetail = {
   ],
   slots: "2/4",
   posted: "2 hours ago",
+  achievements: [
+    { competition: "UI/UX Design Sprint 2025", result: "Winner", year: 2025 },
+    { competition: "Campus Design Challenge", result: "Runner-Up", year: 2024 },
+  ],
+  resources: [
+    { name: "Competition Rulebook 2026.pdf", type: "pdf", url: "#" },
+    { name: "Design System Guidelines", type: "link", url: "https://designsystem.guide" },
+    { name: "Research Template.docx", type: "doc", url: "#" },
+  ],
 };
 
 export default function RecruitmentDetail() {
