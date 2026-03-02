@@ -37,6 +37,7 @@ const mockDetail = {
     { competition: "UI/UX Design Sprint 2025", result: "Winner", year: 2025 },
     { competition: "Campus Design Challenge", result: "Runner-Up", year: 2024 },
   ],
+  resourceLink: "https://drive.google.com/example-guidebook",
   resources: [
     { name: "Competition Rulebook 2026.pdf", type: "pdf", url: "#" },
     { name: "Design System Guidelines", type: "link", url: "https://designsystem.guide" },
