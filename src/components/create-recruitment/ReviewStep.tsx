@@ -6,6 +6,7 @@ interface ReviewStepProps {
   link: string;
   deadline: string;
   whatsappLink: string;
+  resourceLink: string;
   description: string;
   roles: { role: string; skills: string[] }[];
 }
