@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2, Crown, Shield } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2, Crown, Shield, Trophy, Award, BookOpen, FileText, Download } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
