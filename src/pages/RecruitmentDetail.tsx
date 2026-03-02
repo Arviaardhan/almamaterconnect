@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2, Crown, Shield } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, ExternalLink, UserPlus, CheckCircle2, Clock, MessageCircle, Loader2, Crown, Shield, Trophy, Award, BookOpen, FileText, Download } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
@@ -33,6 +33,15 @@ const mockDetail = {
   ],
   slots: "2/4",
   posted: "2 hours ago",
+  achievements: [
+    { competition: "UI/UX Design Sprint 2025", result: "Winner", year: 2025 },
+    { competition: "Campus Design Challenge", result: "Runner-Up", year: 2024 },
+  ],
+  resources: [
+    { name: "Competition Rulebook 2026.pdf", type: "pdf", url: "#" },
+    { name: "Design System Guidelines", type: "link", url: "https://designsystem.guide" },
+    { name: "Research Template.docx", type: "doc", url: "#" },
+  ],
 };
 
 export default function RecruitmentDetail() {
@@ -172,6 +181,67 @@ export default function RecruitmentDetail() {
                 </div>
               </motion.div>
             )}
+
+            {/* Team Achievements */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-2xl border border-border bg-card p-6">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-lime" /> Team Achievements
+              </h2>
+              {mockDetail.achievements.length > 0 ? (
+                <div className="space-y-3">
+                  {mockDetail.achievements.map((a) => (
+                    <div key={a.competition} className="flex items-center justify-between rounded-xl border border-border p-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-lime/10">
+                          <Award className="h-4 w-4 text-lime" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{a.competition}</p>
+                          <p className="text-xs text-muted-foreground">{a.year}</p>
+                        </div>
+                      </div>
+                      <Badge className={
+                        a.result === "Winner"
+                          ? "bg-lime text-lime-foreground border-0 font-bold text-xs"
+                          : "bg-warning/15 text-warning border-warning/30 text-xs"
+                      }>
+                        {a.result === "Winner" && <Award className="h-3 w-3 mr-1" />}
+                        {a.result}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No achievements yet. Compete and win!</p>
+              )}
+            </motion.div>
+
+            {/* Resources / Competition Guides */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-2xl border border-lime/30 bg-card p-6">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-lime" /> Resources & Guides
+              </h2>
+              <div className="space-y-2.5">
+                {mockDetail.resources.map((res) => (
+                  <a
+                    key={res.name}
+                    href={res.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-muted/50 hover:border-lime/30 group"
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-lime/10 group-hover:bg-lime/20 transition-colors">
+                      {res.type === "pdf" ? <FileText className="h-4 w-4 text-lime" /> : res.type === "doc" ? <FileText className="h-4 w-4 text-lime" /> : <BookOpen className="h-4 w-4 text-lime" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{res.name}</p>
+                      <p className="text-xs text-muted-foreground uppercase">{res.type}</p>
+                    </div>
+                    <Download className="h-4 w-4 text-muted-foreground group-hover:text-lime transition-colors shrink-0" />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
           </div>
 
           {/* Sidebar */}
