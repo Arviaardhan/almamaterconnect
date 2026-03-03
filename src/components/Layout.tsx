@@ -24,7 +24,7 @@ export default function Layout() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-emerald">
-              <Trophy className="h-5 w-5 text-primary-foreground" />
+              <Trophy className="h-5 w-5 text-black" />
             </div>
             <span className="text-lg font-bold tracking-tight">
               Almamater<span className="text-primary">Connect</span>
