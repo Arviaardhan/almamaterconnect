@@ -186,17 +186,22 @@ export default function UserProfile() {
                 <Progress value={(user.competitionHistory.wins / user.competitionHistory.totalParticipated) * 100} className="h-2 bg-muted [&>div]:bg-lime" />
               </div>
 
-              {/* Participation list */}
+              {/* Personal Trophy Room */}
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Personal Trophy Room</h3>
               <div className="space-y-2.5">
                 {user.competitionHistory.participations.map((p) => (
                   <div key={p.name} className="flex items-center justify-between rounded-xl border border-border p-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
-                        <Trophy className="h-4 w-4 text-muted-foreground" />
+                      <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${p.result === "Winner" ? "bg-lime/15" : "bg-muted"}`}>
+                        <Trophy className={`h-4 w-4 ${p.result === "Winner" ? "text-lime" : "text-muted-foreground"}`} />
                       </div>
                       <div>
                         <p className="font-medium text-sm text-foreground">{p.name}</p>
-                        <p className="text-xs text-muted-foreground">{p.year}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-xs text-muted-foreground">{p.year}</p>
+                          <span className="text-xs text-muted-foreground">•</span>
+                          <p className="text-xs text-primary font-medium">{p.role}</p>
+                        </div>
                       </div>
                     </div>
                     <Badge
