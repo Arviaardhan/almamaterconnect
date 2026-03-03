@@ -189,27 +189,76 @@ export default function RecruitmentDetail() {
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-lime" /> Team Achievements
               </h2>
+
+              {/* Lineup Strength */}
+              {(() => {
+                const totalMemberWins = Object.values(mockDetail.memberWins).reduce((sum, w) => sum + w, 0);
+                return (
+                  <div className="rounded-xl border border-lime/30 bg-lime/5 p-4 mb-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-lime" />
+                        <span className="text-sm font-semibold text-foreground">Lineup Strength</span>
+                      </div>
+                      <span className="text-2xl font-bold text-lime">{totalMemberWins}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Combined wins from all current active members</p>
+                    <div className="flex items-center gap-2 mt-3 flex-wrap">
+                      {Object.entries(mockDetail.memberWins).map(([name, wins]) => (
+                        <div key={name} className="flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1">
+                          <Avatar className="h-5 w-5">
+                            <AvatarFallback className="bg-primary/10 text-primary text-[8px] font-bold">
+                              {name.split(" ").map(n => n[0]).join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-xs font-medium text-foreground">{name.split(" ")[0]}</span>
+                          <Badge className="bg-lime/15 text-lime border-0 text-[10px] h-4 px-1.5">{wins}W</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {mockDetail.achievements.length > 0 ? (
                 <div className="space-y-3">
                   {mockDetail.achievements.map((a) => (
-                    <div key={a.competition} className="flex items-center justify-between rounded-xl border border-border p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-lime/10">
-                          <Award className="h-4 w-4 text-lime" />
+                    <div key={a.competition} className="rounded-xl border border-border p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-lime/10">
+                            <Award className="h-4 w-4 text-lime" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-sm">{a.competition}</p>
+                            <p className="text-xs text-muted-foreground">{a.year}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-sm">{a.competition}</p>
-                          <p className="text-xs text-muted-foreground">{a.year}</p>
-                        </div>
+                        <Badge className={
+                          a.result === "Winner"
+                            ? "bg-lime text-lime-foreground border-0 font-bold text-xs"
+                            : "bg-warning/15 text-warning border-warning/30 text-xs"
+                        }>
+                          {a.result === "Winner" && <Award className="h-3 w-3 mr-1" />}
+                          {a.result}
+                        </Badge>
                       </div>
-                      <Badge className={
-                        a.result === "Winner"
-                          ? "bg-lime text-lime-foreground border-0 font-bold text-xs"
-                          : "bg-warning/15 text-warning border-warning/30 text-xs"
-                      }>
-                        {a.result === "Winner" && <Award className="h-3 w-3 mr-1" />}
-                        {a.result}
-                      </Badge>
+                      {/* Roster */}
+                      <div className="mt-2.5 flex items-center gap-1.5 pl-12">
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider mr-1">Roster:</span>
+                        <div className="flex -space-x-1.5">
+                          {a.roster.map((m) => (
+                            <Avatar key={m.initials} className="h-6 w-6 ring-2 ring-card">
+                              <AvatarFallback className="bg-primary/10 text-primary text-[8px] font-bold">
+                                {m.initials}
+                              </AvatarFallback>
+                            </Avatar>
+                          ))}
+                        </div>
+                        <span className="text-xs text-muted-foreground ml-1">
+                          {a.roster.map(m => m.name.split(" ")[0]).join(", ")}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
