@@ -146,7 +146,16 @@ export default function DiscoverTalent() {
 
   const activeFilterCount = selectedMajors.length + selectedInstitutions.length + selectedSkills.length;
 
-  return (
+  const visibleItems = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 6);
+      setLoadingMore(false);
+    }, 800);
+  };
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
