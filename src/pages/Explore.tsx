@@ -26,6 +26,8 @@ export default function Explore() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const toggleCategory = (cat: string) => {
     setSelectedCategories((prev) =>
