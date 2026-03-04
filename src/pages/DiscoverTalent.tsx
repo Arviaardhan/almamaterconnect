@@ -124,6 +124,8 @@ export default function DiscoverTalent() {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [inviteUser, setInviteUser] = useState<typeof mockUsers[0] | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   // Simulate loading on filter change
   const handleFilterChange = (setter: (v: string[]) => void) => (val: string[]) => {
@@ -143,6 +145,17 @@ export default function DiscoverTalent() {
   }, [search, selectedMajors, selectedInstitutions, selectedSkills]);
 
   const activeFilterCount = selectedMajors.length + selectedInstitutions.length + selectedSkills.length;
+
+  const visibleItems = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 6);
+      setLoadingMore(false);
+    }, 800);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -231,9 +244,10 @@ export default function DiscoverTalent() {
               <p className="text-sm text-muted-foreground/70 mt-1">Try adjusting your filters or search term.</p>
             </div>
           ) : (
+            <>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               <AnimatePresence mode="popLayout">
-                {filtered.map((user, i) => (
+                {visibleItems.map((user, i) => (
                   <motion.div
                     key={user.id}
                     initial={{ opacity: 0, y: 12 }}
@@ -256,7 +270,6 @@ export default function DiscoverTalent() {
                             </Badge>
                             <p className="text-xs text-muted-foreground mt-0.5">{user.major}</p>
                           </div>
-                          {/* Social links */}
                           <div className="flex gap-1 shrink-0">
                             {user.github && (
                               <a href={user.github} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
@@ -271,20 +284,17 @@ export default function DiscoverTalent() {
                           </div>
                         </div>
 
-                        {/* Skills */}
                         <div className="mt-3 flex flex-wrap gap-1.5">
                           {user.skills.map(s => (
                             <Badge key={s} variant="outline" className="text-[10px] px-2 py-0 font-medium">{s}</Badge>
                           ))}
                         </div>
 
-                        {/* Quick Stats */}
                         <div className="mt-3 flex gap-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1"><Users className="h-3 w-3" />{user.teamsJoined} Teams</span>
                           <span className="flex items-center gap-1"><FolderKanban className="h-3 w-3" />{user.projectsCompleted} Projects</span>
                         </div>
 
-                        {/* Actions */}
                         <div className="mt-4 flex gap-2">
                           <Button variant="outline" size="sm" className="flex-1 text-xs" asChild>
                             <Link to={`/profile/${user.id}`}>
@@ -301,6 +311,20 @@ export default function DiscoverTalent() {
                 ))}
               </AnimatePresence>
             </div>
+
+            {loadingMore && (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 mt-4">
+                {Array.from({ length: 3 }).map((_, i) => <TalentCardSkeleton key={i} />)}
+              </div>
+            )}
+            {hasMore && !loadingMore && (
+              <div className="flex justify-center pt-8 pb-4">
+                <Button variant="outline" size="lg" onClick={handleLoadMore} className="px-8">
+                  Load More Talent
+                </Button>
+              </div>
+            )}
+            </>
           )}
         </div>
       </div>

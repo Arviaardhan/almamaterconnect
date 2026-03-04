@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Search, Filter, Users, ArrowRight, Clock, X, MapPin, AlertTriangle, Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
 import { motion } from "framer-motion";
 
@@ -26,6 +27,8 @@ export default function Explore() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const toggleCategory = (cat: string) => {
     setSelectedCategories((prev) =>
@@ -48,6 +51,17 @@ export default function Explore() {
   });
 
   const activeFilters = selectedCategories.length + selectedSkills.length;
+
+  const visibleItems = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  const handleLoadMore = useCallback(() => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 6);
+      setLoadingMore(false);
+    }, 800);
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -213,8 +227,9 @@ export default function Explore() {
               <p className="mt-1 text-sm text-muted-foreground">Try adjusting your filters or search terms</p>
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              {filtered.map((post, i) => (
+              {visibleItems.map((post, i) => (
                 <motion.div
                   key={post.id}
                   initial={{ opacity: 0, y: 15 }}
@@ -284,7 +299,35 @@ export default function Explore() {
                 </motion.div>
               ))}
             </div>
-          )}
+
+            {/* Load More */}
+            {loadingMore && (
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-4">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="rounded-2xl border border-border bg-card p-5 space-y-3">
+                    <div className="flex gap-2">
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </div>
+                    <Skeleton className="h-5 w-48" />
+                    <Skeleton className="h-4 w-full" />
+                    <div className="flex gap-2 mt-2">
+                      <Skeleton className="h-5 w-20 rounded-md" />
+                      <Skeleton className="h-5 w-16 rounded-md" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {hasMore && !loadingMore && (
+              <div className="flex justify-center pt-8 pb-4">
+                <Button variant="outline" size="lg" onClick={handleLoadMore} className="px-8">
+                  Load More Teams
+                </Button>
+              </div>
+            )}
+          </>
+        )}
         </div>
       </div>
     </div>
