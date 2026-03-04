@@ -38,12 +38,12 @@
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 68 100% 62%;
+    --sidebar-primary: 100 38% 42%;
     --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 68 80% 92%;
-    --sidebar-accent-foreground: 68 100% 25%;
+    --sidebar-accent: 100 30% 93%;
+    --sidebar-accent-foreground: 100 38% 25%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 68 100% 62%;
+    --sidebar-ring: 100 38% 42%;
 
     --emerald-glow: 68 100% 65%;
     --slate-blue: 230 70% 62%;
