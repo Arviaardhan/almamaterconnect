@@ -124,6 +124,8 @@ export default function DiscoverTalent() {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [inviteUser, setInviteUser] = useState<typeof mockUsers[0] | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   // Simulate loading on filter change
   const handleFilterChange = (setter: (v: string[]) => void) => (val: string[]) => {
