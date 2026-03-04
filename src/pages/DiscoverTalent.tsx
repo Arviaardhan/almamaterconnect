@@ -156,6 +156,8 @@ export default function DiscoverTalent() {
       setLoadingMore(false);
     }, 800);
   };
+
+  return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
