@@ -96,16 +96,16 @@
     --sidebar-border: 220 15% 18%;
     --sidebar-ring: 100 38% 48%;
 
-    --emerald-glow: 68 100% 65%;
+    --emerald-glow: 100 38% 52%;
     --slate-blue: 230 70% 65%;
     --slate-blue-light: 230 30% 18%;
     --footer-bg: 225 25% 10%;
     --footer-foreground: 220 15% 80%;
     --footer-muted: 220 15% 45%;
-    --success: 68 100% 65%;
+    --success: 100 38% 48%;
     --warning: 38 92% 55%;
     --info: 230 70% 65%;
-    --lime: 75 80% 55%;
+    --lime: 100 38% 48%;
     --lime-foreground: 0 0% 0%;
   }
 }
