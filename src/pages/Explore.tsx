@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Search, Filter, Users, ArrowRight, Clock, X, MapPin, AlertTriangle, Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
