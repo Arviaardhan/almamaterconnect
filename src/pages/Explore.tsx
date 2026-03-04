@@ -52,6 +52,17 @@ export default function Explore() {
 
   const activeFilters = selectedCategories.length + selectedSkills.length;
 
+  const visibleItems = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  const handleLoadMore = useCallback(() => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 6);
+      setLoadingMore(false);
+    }, 800);
+  }, []);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
