@@ -227,6 +227,7 @@ export default function Explore() {
               <p className="mt-1 text-sm text-muted-foreground">Try adjusting your filters or search terms</p>
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               {visibleItems.map((post, i) => (
                 <motion.div
