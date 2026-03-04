@@ -4,6 +4,7 @@ import { Search, Filter, Users, ArrowRight, Clock, X, MapPin, AlertTriangle, Eye
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
 import { motion } from "framer-motion";
 
