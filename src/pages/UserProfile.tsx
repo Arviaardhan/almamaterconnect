@@ -8,6 +8,7 @@ import { ExternalLink, Github, Linkedin, Mail, Trophy, Users, FolderKanban, Book
 import { useState } from "react";
 import InviteToTeamModal from "@/components/InviteToTeamModal";
 import ContactModal from "@/components/ContactModal";
+import PerformanceHistory from "@/components/PerformanceHistory";
 
 const mockUsers: Record<number, {
   id: number; name: string; initials: string; institution: string; major: string;
