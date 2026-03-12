@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown } from "lucide-react";
+import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
