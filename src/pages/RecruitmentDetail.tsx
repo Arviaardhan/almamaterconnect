@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
 import JoinTeamModal from "@/components/JoinTeamModal";
-import PerformanceHistory from "@/components/PerformanceHistory";
 import { useToast } from "@/hooks/use-toast";
 
 const mockDetail = {
@@ -184,11 +183,6 @@ export default function RecruitmentDetail() {
                 </div>
               </motion.div>
             )}
-
-            {/* Performance History */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.23 }}>
-              <PerformanceHistory />
-            </motion.div>
 
             {/* Team Achievements */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-2xl border border-border bg-card p-6">

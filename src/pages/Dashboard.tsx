@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown } from "lucide-react";
+import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
@@ -286,6 +286,15 @@ export default function Dashboard() {
                     <Badge variant={team.status === "Recruiting" ? "default" : "outline"} className="text-xs">
                       {team.status}
                     </Badge>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast({ title: "Edit Team", description: `Editing "${team.name}" — coming soon!` });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                    >
+                      <Settings className="h-3.5 w-3.5" />
+                    </button>
                     <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
                   </div>
                 </button>
