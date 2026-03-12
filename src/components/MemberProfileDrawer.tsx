@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ExternalLink, GraduationCap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import PerformanceHistory from "@/components/PerformanceHistory";
 
 interface MemberProfile {
   id?: number;
@@ -51,6 +52,12 @@ function MemberContent({ member }: { member: MemberProfile }) {
           </div>
         </div>
       )}
+
+      {/* Individual Performance Chart */}
+      <div className="w-full mt-2">
+        <PerformanceHistory />
+      </div>
+
       {member.portfolio && (
         <a href={member.portfolio} target="_blank" rel="noopener noreferrer">
           <Button variant="outline" className="gap-2 mt-2">
@@ -92,10 +99,10 @@ export default function MemberProfileDrawer({ member, open, onOpenChange }: Memb
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Team Member</DialogTitle>
-          <DialogDescription>Profile details</DialogDescription>
+          <DialogDescription>Profile details & performance</DialogDescription>
         </DialogHeader>
         <MemberContent member={member} />
       </DialogContent>

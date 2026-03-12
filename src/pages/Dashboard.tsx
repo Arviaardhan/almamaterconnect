@@ -286,6 +286,15 @@ export default function Dashboard() {
                     <Badge variant={team.status === "Recruiting" ? "default" : "outline"} className="text-xs">
                       {team.status}
                     </Badge>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast({ title: "Edit Team", description: `Editing "${team.name}" — coming soon!` });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                    >
+                      <Settings className="h-3.5 w-3.5" />
+                    </button>
                     <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
                   </div>
                 </button>
