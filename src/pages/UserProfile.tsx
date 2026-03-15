@@ -9,6 +9,7 @@ import { useState } from "react";
 import InviteToTeamModal from "@/components/InviteToTeamModal";
 import ContactModal from "@/components/ContactModal";
 import PerformanceHistory from "@/components/PerformanceHistory";
+import EditProfileSheet from "@/components/EditProfileSheet";
 
 const mockUsers: Record<number, {
   id: number; name: string; initials: string; institution: string; major: string;
@@ -37,6 +38,7 @@ export default function UserProfile() {
   const user = mockUsers[Number(id)];
   const [inviteOpen, setInviteOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   if (!user) {
     return (
@@ -76,7 +78,7 @@ export default function UserProfile() {
               </div>
             </div>
             <div className="flex gap-2 shrink-0">
-              <Button variant="ghost" size="sm" className="gap-1.5">
+              <Button variant="outline" size="sm" className="gap-1.5 hover:scale-105 transition-transform" onClick={() => setEditOpen(true)}>
                 <Pencil className="h-4 w-4" /> Edit Profile
               </Button>
               <Button variant="outline" size="sm" onClick={() => setContactOpen(true)}>
@@ -260,6 +262,11 @@ export default function UserProfile() {
         open={contactOpen}
         onOpenChange={setContactOpen}
         user={{ name: user.name, phone: user.phone, email: user.email }}
+      />
+      <EditProfileSheet
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        user={{ name: user.name, major: user.major, bio: user.bio, skills: user.skills, github: user.github, linkedin: user.linkedin }}
       />
     </div>
   );

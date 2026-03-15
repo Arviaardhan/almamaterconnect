@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
+import EditTeamDialog from "@/components/EditTeamDialog";
 
 const initialRequests = [
   { id: 1, name: "Budi Santoso", initials: "BS", role: "Interaction Designer", skills: ["Figma", "After Effects"], team: "Hackathon UI/UX 2026", time: "1 hour ago", message: "I have 2 years of experience in interaction design and won a design award last year.", major: "Visual Communication Design" },
@@ -66,6 +67,7 @@ export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [removeMember, setRemoveMember] = useState<{ teamName: string; memberName: string } | null>(null);
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
+  const [editTeam, setEditTeam] = useState<typeof initialTeams[0] | null>(null);
   const { toast } = useToast();
 
   const fireConfetti = () => {
@@ -289,9 +291,9 @@ export default function Dashboard() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast({ title: "Edit Team", description: `Editing "${team.name}" — coming soon!` });
+                        setEditTeam(team);
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all hover:scale-105"
                     >
                       <Settings className="h-3.5 w-3.5" />
                     </button>
@@ -356,6 +358,14 @@ export default function Dashboard() {
       </motion.div>
 
       <MemberProfileDrawer member={selectedMember} open={drawerOpen} onOpenChange={setDrawerOpen} />
+
+      {editTeam && (
+        <EditTeamDialog
+          open={!!editTeam}
+          onOpenChange={(open) => !open && setEditTeam(null)}
+          team={editTeam}
+        />
+      )}
 
       {/* Remove Member Confirmation */}
       <Dialog open={!!removeMember} onOpenChange={(open) => !open && setRemoveMember(null)}>
