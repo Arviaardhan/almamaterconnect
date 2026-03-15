@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
+import EditTeamDialog from "@/components/EditTeamDialog";
 
 const initialRequests = [
   { id: 1, name: "Budi Santoso", initials: "BS", role: "Interaction Designer", skills: ["Figma", "After Effects"], team: "Hackathon UI/UX 2026", time: "1 hour ago", message: "I have 2 years of experience in interaction design and won a design award last year.", major: "Visual Communication Design" },
