@@ -263,6 +263,11 @@ export default function UserProfile() {
         onOpenChange={setContactOpen}
         user={{ name: user.name, phone: user.phone, email: user.email }}
       />
+      <EditProfileSheet
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        user={{ name: user.name, major: user.major, bio: user.bio, skills: user.skills, github: user.github, linkedin: user.linkedin }}
+      />
     </div>
   );
 }
