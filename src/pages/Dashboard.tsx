@@ -291,9 +291,9 @@ export default function Dashboard() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast({ title: "Edit Team", description: `Editing "${team.name}" — coming soon!` });
+                        setEditTeam(team);
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all hover:scale-105"
                     >
                       <Settings className="h-3.5 w-3.5" />
                     </button>
