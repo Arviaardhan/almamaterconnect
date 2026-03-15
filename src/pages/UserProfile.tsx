@@ -38,6 +38,7 @@ export default function UserProfile() {
   const user = mockUsers[Number(id)];
   const [inviteOpen, setInviteOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   if (!user) {
     return (
