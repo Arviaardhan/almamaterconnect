@@ -67,6 +67,7 @@ export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [removeMember, setRemoveMember] = useState<{ teamName: string; memberName: string } | null>(null);
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
+  const [editTeam, setEditTeam] = useState<typeof initialTeams[0] | null>(null);
   const { toast } = useToast();
 
   const fireConfetti = () => {
