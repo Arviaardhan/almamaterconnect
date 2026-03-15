@@ -78,7 +78,7 @@ export default function UserProfile() {
               </div>
             </div>
             <div className="flex gap-2 shrink-0">
-              <Button variant="ghost" size="sm" className="gap-1.5">
+              <Button variant="outline" size="sm" className="gap-1.5 hover:scale-105 transition-transform" onClick={() => setEditOpen(true)}>
                 <Pencil className="h-4 w-4" /> Edit Profile
               </Button>
               <Button variant="outline" size="sm" onClick={() => setContactOpen(true)}>
