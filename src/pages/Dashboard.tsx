@@ -359,6 +359,14 @@ export default function Dashboard() {
 
       <MemberProfileDrawer member={selectedMember} open={drawerOpen} onOpenChange={setDrawerOpen} />
 
+      {editTeam && (
+        <EditTeamDialog
+          open={!!editTeam}
+          onOpenChange={(open) => !open && setEditTeam(null)}
+          team={editTeam}
+        />
+      )}
+
       {/* Remove Member Confirmation */}
       <Dialog open={!!removeMember} onOpenChange={(open) => !open && setRemoveMember(null)}>
         <DialogContent className="sm:max-w-sm">
