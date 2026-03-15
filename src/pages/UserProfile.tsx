@@ -9,6 +9,7 @@ import { useState } from "react";
 import InviteToTeamModal from "@/components/InviteToTeamModal";
 import ContactModal from "@/components/ContactModal";
 import PerformanceHistory from "@/components/PerformanceHistory";
+import EditProfileSheet from "@/components/EditProfileSheet";
 
 const mockUsers: Record<number, {
   id: number; name: string; initials: string; institution: string; major: string;
