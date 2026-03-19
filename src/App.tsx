@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import Dashboard from "./pages/Dashboard";
 import CreateRecruitment from "./pages/CreateRecruitment";
 import DiscoverTalent from "./pages/DiscoverTalent";
+import TeamManagement from "./pages/TeamManagement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
