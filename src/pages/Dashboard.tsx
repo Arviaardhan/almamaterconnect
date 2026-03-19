@@ -271,11 +271,11 @@ export default function Dashboard() {
           <div className="grid gap-4">
             {teams.map((team) => (
               <motion.div key={team.name} className="rounded-2xl border border-border bg-card overflow-hidden">
-                <button
-                  onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
-                  className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted/50"
-                >
-                  <div className="flex items-center gap-3">
+                <div className="flex w-full items-center justify-between p-4">
+                  <button
+                    onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
+                    className="flex items-center gap-3 text-left transition-colors hover:opacity-80"
+                  >
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                       <Trophy className="h-5 w-5 text-accent-foreground" />
                     </div>
@@ -283,23 +283,27 @@ export default function Dashboard() {
                       <p className="font-medium text-sm">{team.name}</p>
                       <p className="text-xs text-muted-foreground">{team.filled}/{team.total} members</p>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-2">
                     <Badge variant={team.status === "Recruiting" ? "default" : "outline"} className="text-xs">
                       {team.status}
                     </Badge>
+                    <Link to={`/dashboard/team/${encodeURIComponent(team.name)}`}>
+                      <Button size="sm" variant="outline" className="h-7 gap-1 text-[11px] hover:scale-105 transition-transform">
+                        Manage
+                      </Button>
+                    </Link>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditTeam(team);
-                      }}
+                      onClick={() => setEditTeam(team)}
                       className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all hover:scale-105"
                     >
                       <Settings className="h-3.5 w-3.5" />
                     </button>
-                    <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
+                    <button onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}>
+                      <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
+                    </button>
                   </div>
-                </button>
+                </div>
 
                 <AnimatePresence>
                   {expandedTeam === team.name && (

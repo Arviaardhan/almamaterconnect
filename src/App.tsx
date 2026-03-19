@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import Dashboard from "./pages/Dashboard";
 import CreateRecruitment from "./pages/CreateRecruitment";
 import DiscoverTalent from "./pages/DiscoverTalent";
+import TeamManagement from "./pages/TeamManagement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:id" element={<UserProfile />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/team/:teamId" element={<TeamManagement />} />
             <Route path="/create" element={<CreateRecruitment />} />
             <Route path="/discover-users" element={<DiscoverTalent />} />
             <Route path="/login" element={<Login />} />
