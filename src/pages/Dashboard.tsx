@@ -271,10 +271,11 @@ export default function Dashboard() {
           <div className="grid gap-4">
             {teams.map((team) => (
               <motion.div key={team.name} className="rounded-2xl border border-border bg-card overflow-hidden">
-                <button
-                  onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
-                  className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted/50"
-                >
+                <div className="flex w-full items-center justify-between p-4 text-left">
+                  <button
+                    onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
+                    className="flex items-center gap-3 transition-colors hover:opacity-80"
+                  >
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                       <Trophy className="h-5 w-5 text-accent-foreground" />
