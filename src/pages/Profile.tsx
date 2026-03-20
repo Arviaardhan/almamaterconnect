@@ -45,7 +45,7 @@ export default function Profile() {
                 <p className="mt-3 max-w-lg text-sm text-muted-foreground leading-relaxed">{profile.bio}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="gap-2 shrink-0">
+            <Button variant="outline" size="sm" className="gap-2 shrink-0" onClick={() => navigate("/profile/edit")}>
               <Edit className="h-4 w-4" /> Edit Profile
             </Button>
           </div>
