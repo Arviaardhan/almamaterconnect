@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Edit, ExternalLink, Github, Linkedin, Globe, Trophy, Users, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const profile = {
   name: "Andi Pratama",
@@ -24,6 +25,7 @@ const profile = {
 };
 
 export default function Profile() {
+  const navigate = useNavigate();
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="animate-fade-in">
@@ -43,7 +45,7 @@ export default function Profile() {
                 <p className="mt-3 max-w-lg text-sm text-muted-foreground leading-relaxed">{profile.bio}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="gap-2 shrink-0">
+            <Button variant="outline" size="sm" className="gap-2 shrink-0" onClick={() => navigate("/profile/edit")}>
               <Edit className="h-4 w-4" /> Edit Profile
             </Button>
           </div>
