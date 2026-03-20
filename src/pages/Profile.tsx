@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Edit, ExternalLink, Github, Linkedin, Globe, Trophy, Users, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const profile = {
   name: "Andi Pratama",
