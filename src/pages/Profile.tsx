@@ -25,6 +25,7 @@ const profile = {
 };
 
 export default function Profile() {
+  const navigate = useNavigate();
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="animate-fade-in">
