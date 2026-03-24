@@ -19,11 +19,11 @@ export default function CTASection() {
             Siap Membangun Tim Juara?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Bergabung dengan ratusan mahasiswa yang sudah menemukan tim impian mereka di AlmamaterConnect.
+            Bergabung dengan ratusan mahasiswa yang sudah menemukan tim impian mereka.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link to="/signup">
-              <Button size="lg" className="gap-2 px-8 font-semibold shadow-lg shadow-primary/25">
+              <Button size="lg" className="gap-2 px-8 font-semibold shadow-lg shadow-primary/25 transition-transform hover:scale-105">
                 Mulai Gratis <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>

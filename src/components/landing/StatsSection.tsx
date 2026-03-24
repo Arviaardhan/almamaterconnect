@@ -1,26 +1,26 @@
 import { motion } from "framer-motion";
-import { Search, ShieldCheck, MessageCircle, LayoutDashboard } from "lucide-react";
+import { ShieldCheck, Code2, MessageCircle, FolderOpen } from "lucide-react";
 
 const features = [
   {
-    icon: Search,
-    title: "Pencarian Berbasis Skill",
-    desc: "Temukan partner berdasarkan keahlian spesifik — React, Python, Figma, dan ratusan skill lainnya.",
+    icon: ShieldCheck,
+    title: "Eksklusif Almamater",
+    desc: "Hanya mahasiswa terverifikasi dari almamater Anda yang bisa bergabung. Kolaborasi yang aman dan terpercaya.",
   },
   {
-    icon: ShieldCheck,
-    title: "Verifikasi Almamater",
-    desc: "Hanya mahasiswa terverifikasi yang bisa bergabung. Kolaborasi lebih aman dan terpercaya.",
+    icon: Code2,
+    title: "Pencarian Berbasis Skill",
+    desc: "Temukan partner spesifik — Backend, Marketing, Data Science — dengan filter skill yang presisi.",
   },
   {
     icon: MessageCircle,
-    title: "Undang & Hubungi Langsung",
-    desc: "Kirim undangan ke talent yang kamu incar, atau hubungi langsung via WhatsApp dan email.",
+    title: "Kolaborasi Cepat",
+    desc: "Undang dan hubungi langsung via platform. Dari penemuan ke kolaborasi dalam hitungan menit.",
   },
   {
-    icon: LayoutDashboard,
-    title: "Dashboard Tim",
-    desc: "Kelola anggota, deadline, dan resources kompetisi dengan dashboard yang intuitif.",
+    icon: FolderOpen,
+    title: "Portofolio Bersama",
+    desc: "Bangun rekam jejak kompetisi yang solid. Setiap kemenangan tercatat di profil tim dan individu.",
   },
 ];
 
@@ -34,8 +34,8 @@ export default function StatsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">FITUR</p>
-          <h2 className="text-3xl font-bold md:text-4xl">Fitur Unggulan Kami</h2>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">KEUNGGULAN</p>
+          <h2 className="text-3xl font-bold md:text-4xl">Kenapa Harus AlmamaterConnect?</h2>
           <p className="mt-3 text-muted-foreground">Semua yang kamu butuhkan untuk membangun tim juara</p>
         </motion.div>
 
@@ -43,14 +43,14 @@ export default function StatsSection() {
           {features.map((f, i) => (
             <motion.div
               key={f.title}
-              className="glass-card rounded-2xl p-6 text-center hover-glow group"
+              className="glass-card rounded-2xl p-6 text-center hover-glow group cursor-default"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ scale: 1.03, y: -4 }}
             >
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-primary mb-4 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-primary mb-4 transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
                 <f.icon className="h-6 w-6" />
               </div>
               <h3 className="text-base font-semibold">{f.title}</h3>
