@@ -2,11 +2,9 @@ import HeroSection from "@/components/landing/HeroSection";
 import StatsSection from "@/components/landing/StatsSection";
 import HowItWorks from "@/components/landing/HowItWorks";
 import MarqueeSection from "@/components/landing/MarqueeSection";
-import FeaturedCompetitions from "@/components/landing/FeaturedCompetitions";
+import TeamTeaserSection from "@/components/landing/TeamTeaserSection";
 import CTASection from "@/components/landing/CTASection";
 import FooterSection from "@/components/landing/FooterSection";
-import HallOfFame from "@/components/landing/HallOfFame";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
 
 export default function Landing() {
   return (
@@ -15,9 +13,7 @@ export default function Landing() {
       <MarqueeSection />
       <HowItWorks />
       <StatsSection />
-      <FeaturedCompetitions />
-      <HallOfFame />
-      <TestimonialsSection />
+      <TeamTeaserSection />
       <CTASection />
       <FooterSection />
     </div>
