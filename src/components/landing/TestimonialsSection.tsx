@@ -5,23 +5,23 @@ import { Star } from "lucide-react";
 const testimonials = [
   {
     name: "Rina Sari",
-    major: "Informatics, UMK",
+    major: "Informatika, UMK",
     initials: "RS",
-    text: "Found my dream team for Gemastik in just 2 days. We ended up winning silver medal! This platform is a game changer.",
+    text: "Menemukan tim impian untuk Gemastik dalam 2 hari saja. Kami berhasil meraih medali perak! Platform ini benar-benar game changer.",
     stars: 5,
   },
   {
     name: "Adi Pratama",
-    major: "Business Admin, UI",
+    major: "Administrasi Bisnis, UI",
     initials: "AP",
-    text: "As a business student, finding tech teammates was impossible. AlmamaterConnect matched me with developers who complemented our skills perfectly.",
+    text: "Sebagai mahasiswa bisnis, menemukan teammate dari bidang tech itu sangat sulit. AlmamaterConnect menghubungkan saya dengan developer yang tepat.",
     stars: 5,
   },
   {
     name: "Maya Lestari",
-    major: "Computer Science, ITB",
+    major: "Ilmu Komputer, ITB",
     initials: "ML",
-    text: "The recruitment flow is so smooth. Posted our need for a UI designer and got 5 qualified applicants within hours.",
+    text: "Alur rekrutmennya sangat smooth. Post kebutuhan UI designer dan dapat 5 pelamar berkualitas dalam hitungan jam.",
     stars: 5,
   },
 ];
@@ -36,8 +36,9 @@ export default function TestimonialsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold md:text-4xl">Success Stories</h2>
-          <p className="mt-3 text-muted-foreground">Real students, real wins</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">TESTIMONI</p>
+          <h2 className="text-3xl font-bold md:text-4xl">Kata Mereka</h2>
+          <p className="mt-3 text-muted-foreground">Mahasiswa nyata, kemenangan nyata</p>
         </motion.div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 max-w-5xl mx-auto">
@@ -56,12 +57,10 @@ export default function TestimonialsSection() {
                   <Star key={j} className="h-4 w-4 fill-warning text-warning" />
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5">"{t.text}"</p>
+              <p className="text-[13px] text-muted-foreground leading-relaxed mb-5">"{t.text}"</p>
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
-                  <AvatarFallback className="text-xs font-semibold bg-accent text-accent-foreground">
-                    {t.initials}
-                  </AvatarFallback>
+                  <AvatarFallback className="text-xs font-semibold bg-accent text-accent-foreground">{t.initials}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-sm font-semibold">{t.name}</p>

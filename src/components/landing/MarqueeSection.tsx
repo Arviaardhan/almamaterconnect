@@ -32,12 +32,12 @@ export default function MarqueeSection() {
     <section className="py-12 border-t border-border overflow-hidden">
       <div className="container mx-auto px-4 mb-6">
         <motion.p
-          className="text-center text-sm font-medium text-muted-foreground uppercase tracking-wider"
+          className="text-center text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Supported Competition Categories
+          Kategori Kompetisi yang Didukung
         </motion.p>
       </div>
       <div className="space-y-3">

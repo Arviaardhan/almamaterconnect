@@ -1,29 +1,30 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight, Rocket } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function CTASection() {
   return (
-    <section className="border-t border-border py-20">
-      <div className="container mx-auto px-4 text-center">
+    <section className="border-t border-border py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-primary/5" />
+      <div className="container relative mx-auto px-4 text-center">
         <motion.div
           className="mx-auto max-w-2xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <Globe className="mx-auto h-12 w-12 text-primary animate-float" />
+          <Rocket className="mx-auto h-12 w-12 text-primary" />
           <h2 className="mt-6 text-3xl font-bold md:text-4xl">
-            Ready to Find Your Team?
+            Siap Membangun Tim Juara?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Join hundreds of students already building winning teams on AlmamaterConnect.
+            Bergabung dengan ratusan mahasiswa yang sudah menemukan tim impian mereka di AlmamaterConnect.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link to="/signup">
               <Button size="lg" className="gap-2 px-8 font-semibold shadow-lg shadow-primary/25">
-                Get Started Free <ArrowRight className="h-5 w-5" />
+                Mulai Gratis <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
           </div>
