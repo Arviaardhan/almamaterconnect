@@ -2,13 +2,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle, UserMinus, Shield, Crown, Settings } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import {
+  Check, X, Bell, Users, Trophy, Clock, ArrowRight, MessageCircle,
+  UserMinus, Shield, Crown, Settings, TrendingUp, ExternalLink, Quote
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import MemberProfileDrawer from "@/components/MemberProfileDrawer";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+  DialogDescription, DialogFooter
+} from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
 import EditTeamDialog from "@/components/EditTeamDialog";
 
@@ -60,6 +66,48 @@ const initialTeams = [
   },
 ];
 
+const statsConfig = [
+  {
+    icon: Users,
+    label: "Active Teams",
+    trend: "+1 this month",
+    bgClass: "bg-info/10",
+    iconClass: "text-info",
+  },
+  {
+    icon: Bell,
+    label: "Pending Requests",
+    trend: "3 awaiting review",
+    bgClass: "bg-purple-500/10",
+    iconClass: "text-purple-500",
+  },
+  {
+    icon: Trophy,
+    label: "Competitions",
+    value: "5",
+    trend: "+2 new this week",
+    bgClass: "bg-warning/10",
+    iconClass: "text-warning",
+  },
+  {
+    icon: Clock,
+    label: "Upcoming",
+    value: "2",
+    trend: "Next in 5 days",
+    bgClass: "bg-primary/10",
+    iconClass: "text-primary",
+  },
+];
+
+const staggerChild = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.4, ease: [0, 0, 0.2, 1] as const },
+  }),
+};
+
 export default function Dashboard() {
   const [requests, setRequests] = useState(initialRequests);
   const [teams, setTeams] = useState(initialTeams);
@@ -68,6 +116,7 @@ export default function Dashboard() {
   const [removeMember, setRemoveMember] = useState<{ teamName: string; memberName: string } | null>(null);
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
   const [editTeam, setEditTeam] = useState<typeof initialTeams[0] | null>(null);
+  const [activeTab, setActiveTab] = useState<"requests" | "notifications">("requests");
   const { toast } = useToast();
 
   const fireConfetti = () => {
@@ -75,7 +124,7 @@ export default function Dashboard() {
       particleCount: 80,
       spread: 60,
       origin: { y: 0.6 },
-      colors: ["#10b981", "#34d399", "#6ee7b7", "#a7f3d0"],
+      colors: ["#5A8D39", "#6aa343", "#8bc34a", "#a5d66b"],
     });
   };
 
@@ -96,7 +145,7 @@ export default function Dashboard() {
     fireConfetti();
     toast({
       title: "🎉 Member Successfully Joined!",
-      description: `${req.name} has been added to ${req.team}. The coordination group link has now been shared with them.`,
+      description: `${req.name} has been added to ${req.team}.`,
       className: "border-primary/50 bg-accent",
     });
   };
@@ -135,103 +184,178 @@ export default function Dashboard() {
     setDrawerOpen(true);
   };
 
+  const dynamicStats = [
+    { ...statsConfig[0], value: String(teams.length) },
+    { ...statsConfig[1], value: String(requests.length) },
+    { ...statsConfig[2] },
+    { ...statsConfig[3] },
+  ];
+
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="mt-2 text-muted-foreground">Manage your teams and requests</p>
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      {/* Personalized Greeting */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mb-8"
+      >
+        <h1 className="text-2xl font-bold tracking-tight">
+          Selamat Datang Kembali, Andi! 👋
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Kelola tim dan pantau perkembangan kompetisi Anda.
+        </p>
+      </motion.div>
+
+      {/* Glassmorphism Stats */}
+      <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {dynamicStats.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            custom={i}
+            initial="hidden"
+            animate="visible"
+            variants={staggerChild}
+            whileHover={{ scale: 1.04, y: -2 }}
+            className="glass-card rounded-2xl p-4 hover-glow cursor-default"
+          >
+            <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${stat.bgClass}`}>
+              <stat.icon className={`h-4.5 w-4.5 ${stat.iconClass}`} />
+            </div>
+            <p className="mt-3 text-2xl font-bold tracking-tight">{stat.value}</p>
+            <p className="text-[11px] font-semibold text-muted-foreground">{stat.label}</p>
+            <div className="mt-1.5 flex items-center gap-1">
+              <TrendingUp className="h-3 w-3 text-primary" />
+              <span className="text-[10px] text-primary font-medium">{stat.trend}</span>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-        {/* Quick Stats */}
-        <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {[
-            { icon: Users, label: "Active Teams", value: String(teams.length), color: "text-primary" },
-            { icon: Bell, label: "Pending Requests", value: String(requests.length), color: "text-secondary" },
-            { icon: Trophy, label: "Competitions", value: "5", color: "text-warning" },
-            { icon: Clock, label: "Upcoming", value: "2", color: "text-info" },
-          ].map((stat) => (
-            <motion.div key={stat.label} whileHover={{ scale: 1.03 }} className="rounded-2xl border border-border bg-card p-4">
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
-              <p className="mt-2 text-2xl font-bold">{stat.value}</p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
-            </motion.div>
-          ))}
+      {/* Tab Switcher */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        <div className="mb-6">
+          <div className="relative flex gap-1 rounded-xl bg-muted/60 p-1 w-fit">
+            {[
+              { key: "requests" as const, label: "Join Requests", icon: Users, count: requests.length },
+              { key: "notifications" as const, label: "Notifications", icon: Bell, count: notifications.filter(() => true).length },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-[13px] font-semibold transition-all duration-200 ${
+                  activeTab === tab.key
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <tab.icon className="h-3.5 w-3.5" />
+                {tab.label}
+                {tab.key === "requests" && requests.length > 0 && (
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold px-1.5">
+                    {requests.length}
+                  </span>
+                )}
+                {tab.key === "notifications" && (
+                  <span className="h-2 w-2 rounded-full bg-warning animate-pulse" />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <Tabs defaultValue="requests" className="space-y-6">
-          <TabsList className="bg-muted">
-            <TabsTrigger value="requests" className="gap-2">
-              <Users className="h-4 w-4" /> Join Requests
-              <AnimatePresence>
-                {requests.length > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs"
-                  >
-                    {requests.length}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="gap-2">
-              <Bell className="h-4 w-4" /> Notifications
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="requests" className="space-y-4">
+        {/* Join Requests */}
+        {activeTab === "requests" && (
+          <div className="space-y-4">
             <AnimatePresence mode="popLayout">
               {requests.length === 0 ? (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-border bg-card p-12 text-center">
-                  <Users className="mx-auto h-12 w-12 text-muted-foreground/50" />
-                  <p className="mt-4 font-medium">No pending requests</p>
-                  <p className="mt-1 text-sm text-muted-foreground">You're all caught up! New requests will appear here.</p>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="glass-card rounded-2xl p-12 text-center"
+                >
+                  <Users className="mx-auto h-12 w-12 text-muted-foreground/40" />
+                  <p className="mt-4 font-semibold">No pending requests</p>
+                  <p className="mt-1 text-sm text-muted-foreground">You're all caught up!</p>
                 </motion.div>
               ) : (
-                requests.map((req) => (
+                requests.map((req, i) => (
                   <motion.div
                     key={req.id}
                     layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    custom={i}
+                    initial="hidden"
+                    animate="visible"
                     exit={{ opacity: 0, x: -100, transition: { duration: 0.2 } }}
-                    className="rounded-2xl border border-border bg-card p-5"
+                    variants={staggerChild}
+                    whileHover={{ y: -2 }}
+                    className="glass-card rounded-2xl p-5 hover-glow transition-shadow"
                   >
                     <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                       <div className="flex items-start gap-4">
-                        <Avatar className="h-12 w-12">
-                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                        <Avatar className="h-12 w-12 ring-2 ring-primary/10 ring-offset-2 ring-offset-background">
+                          <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
                             {req.initials}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <button onClick={() => handleViewProfile(req)} className="font-semibold hover:text-primary transition-colors hover:underline">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <button
+                              onClick={() => handleViewProfile(req)}
+                              className="text-[14px] font-bold hover:text-primary transition-colors hover:underline underline-offset-2"
+                            >
                               {req.name}
                             </button>
-                            <span className="text-xs text-muted-foreground">· {req.time}</span>
+                            <span className="text-[10px] text-muted-foreground font-medium">{req.time}</span>
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            Wants to join <span className="font-medium text-foreground">{req.team}</span> as {req.role}
+                          <p className="text-[12px] text-muted-foreground mt-0.5">
+                            Wants to join{" "}
+                            <span className="font-semibold text-foreground">{req.team}</span>{" "}
+                            as <span className="font-medium text-secondary">{req.role}</span>
                           </p>
-                          <p className="mt-2 text-sm text-muted-foreground italic">"{req.message}"</p>
-                          <div className="mt-2 flex flex-wrap gap-1.5">
+
+                          {/* Quote-style message */}
+                          <div className="mt-3 rounded-lg bg-muted/50 border-l-2 border-primary/30 px-3 py-2">
+                            <p className="text-[12px] text-muted-foreground italic leading-relaxed">
+                              "{req.message}"
+                            </p>
+                          </div>
+
+                          {/* Skill pills */}
+                          <div className="mt-3 flex flex-wrap gap-1.5">
                             {req.skills.map((skill) => (
-                              <span key={skill} className="rounded-md bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
+                              <span
+                                key={skill}
+                                className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-semibold text-primary"
+                              >
                                 {skill}
                               </span>
                             ))}
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-2 shrink-0">
-                        <Button size="sm" variant="outline" className="gap-1 text-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleDecline(req.id)}>
-                          <X className="h-4 w-4" /> Decline
+
+                      {/* Action buttons */}
+                      <div className="flex gap-2 shrink-0 md:flex-col md:items-end">
+                        <Button
+                          size="sm"
+                          className="gap-1.5 text-[11px] font-bold hover:scale-105 transition-transform btn-press"
+                          onClick={() => handleApprove(req)}
+                        >
+                          <Check className="h-3.5 w-3.5" /> Approve
                         </Button>
-                        <Button size="sm" className="gap-1" onClick={() => handleApprove(req)}>
-                          <Check className="h-4 w-4" /> Approve
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="gap-1.5 text-[11px] font-bold text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground hover:scale-105 transition-transform btn-press"
+                          onClick={() => handleDecline(req.id)}
+                        >
+                          <X className="h-3.5 w-3.5" /> Decline
                         </Button>
                       </div>
                     </div>
@@ -239,72 +363,155 @@ export default function Dashboard() {
                 ))
               )}
             </AnimatePresence>
-          </TabsContent>
+          </div>
+        )}
 
-          <TabsContent value="notifications" className="space-y-3">
-            {notifications.map((notif) => (
+        {/* Notifications */}
+        {activeTab === "notifications" && (
+          <div className="space-y-3">
+            {notifications.map((notif, i) => (
               <motion.div
                 key={notif.id}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-start gap-4 rounded-2xl border border-border bg-card p-4"
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                variants={staggerChild}
+                className="glass-card flex items-start gap-4 rounded-2xl p-4 hover-glow"
               >
-                <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                  notif.type === "success" ? "bg-accent text-accent-foreground" :
-                  notif.type === "warning" ? "bg-warning/10 text-warning" :
-                  "bg-secondary/10 text-secondary"
-                }`}>
+                <div
+                  className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                    notif.type === "success"
+                      ? "bg-primary/10 text-primary"
+                      : notif.type === "warning"
+                      ? "bg-warning/10 text-warning"
+                      : "bg-info/10 text-info"
+                  }`}
+                >
                   <Bell className="h-4 w-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm">{notif.message}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{notif.time}</p>
+                  <p className="text-[13px] font-medium">{notif.message}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{notif.time}</p>
                 </div>
               </motion.div>
             ))}
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
+      </motion.div>
 
-        {/* My Teams */}
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4">My Teams</h2>
-          <div className="grid gap-4">
-            {teams.map((team) => (
-              <motion.div key={team.name} className="rounded-2xl border border-border bg-card overflow-hidden">
-                <div className="flex w-full items-center justify-between p-4">
-                  <button
-                    onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}
-                    className="flex items-center gap-3 text-left transition-colors hover:opacity-80"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
-                      <Trophy className="h-5 w-5 text-accent-foreground" />
+      {/* My Teams Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="mt-10"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">MY TEAMS</p>
+            <h2 className="text-lg font-bold mt-0.5">Tim Kompetisi Anda</h2>
+          </div>
+          <Link to="/create">
+            <Button size="sm" className="gap-1.5 text-[11px] font-bold hover:scale-105 transition-transform btn-press">
+              <Trophy className="h-3.5 w-3.5" /> Buat Tim Baru
+            </Button>
+          </Link>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {teams.map((team, i) => {
+            const progress = (team.filled / team.total) * 100;
+            const isRecruiting = team.status === "Recruiting";
+
+            return (
+              <motion.div
+                key={team.name}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                variants={staggerChild}
+                whileHover={{ y: -4 }}
+                className="glass-card rounded-2xl overflow-hidden hover-glow group"
+              >
+                {/* Top accent bar */}
+                <div className={`h-1 w-full ${isRecruiting ? "bg-primary" : "bg-muted-foreground/30"}`} />
+
+                <div className="p-4">
+                  {/* Header with actions */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] font-bold truncate">{team.name}</p>
+                      <Badge
+                        variant={isRecruiting ? "default" : "outline"}
+                        className={`mt-1.5 text-[10px] font-bold ${
+                          isRecruiting
+                            ? "bg-primary/15 text-primary border-primary/20 hover:bg-primary/15"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        {isRecruiting && (
+                          <span className="mr-1 h-1.5 w-1.5 rounded-full bg-primary animate-pulse inline-block" />
+                        )}
+                        {team.status}
+                      </Badge>
                     </div>
-                    <div>
-                      <p className="font-medium text-sm">{team.name}</p>
-                      <p className="text-xs text-muted-foreground">{team.filled}/{team.total} members</p>
+
+                    <div className="flex items-center gap-1">
+                      <Link to={`/recruitment/${encodeURIComponent(team.name)}`}>
+                        <button className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all opacity-0 group-hover:opacity-100">
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => setEditTeam(team)}
+                        className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all opacity-0 group-hover:opacity-100"
+                      >
+                        <Settings className="h-3.5 w-3.5" />
+                      </button>
                     </div>
-                  </button>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={team.status === "Recruiting" ? "default" : "outline"} className="text-xs">
-                      {team.status}
-                    </Badge>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[10px] font-semibold text-muted-foreground">Members</span>
+                      <span className="text-[11px] font-bold">
+                        {team.filled}<span className="text-muted-foreground font-medium">/{team.total}</span>
+                      </span>
+                    </div>
+                    <Progress value={progress} className="h-1.5" />
+                  </div>
+
+                  {/* Member avatars */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex -space-x-2">
+                      {team.members.slice(0, 4).map((member) => (
+                        <Avatar key={member.name} className="h-7 w-7 border-2 border-card">
+                          <AvatarFallback className="bg-primary/10 text-primary text-[9px] font-bold">
+                            {member.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                      ))}
+                      {team.members.length > 4 && (
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted border-2 border-card text-[9px] font-bold text-muted-foreground">
+                          +{team.members.length - 4}
+                        </div>
+                      )}
+                    </div>
+
                     <Link to={`/dashboard/team/${encodeURIComponent(team.name)}`}>
-                      <Button size="sm" variant="outline" className="h-7 gap-1 text-[11px] hover:scale-105 transition-transform">
-                        Manage
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 gap-1 text-[10px] font-bold hover:scale-105 transition-transform btn-press"
+                      >
+                        Manage <ArrowRight className="h-3 w-3" />
                       </Button>
                     </Link>
-                    <button
-                      onClick={() => setEditTeam(team)}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all hover:scale-105"
-                    >
-                      <Settings className="h-3.5 w-3.5" />
-                    </button>
-                    <button onClick={() => setExpandedTeam(expandedTeam === team.name ? null : team.name)}>
-                      <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${expandedTeam === team.name ? "rotate-90" : ""}`} />
-                    </button>
                   </div>
                 </div>
 
+                {/* Expandable members */}
                 <AnimatePresence>
                   {expandedTeam === team.name && (
                     <motion.div
@@ -315,38 +522,40 @@ export default function Dashboard() {
                       className="overflow-hidden"
                     >
                       <div className="border-t border-border px-4 py-3 space-y-2">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Current Members</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                          CURRENT MEMBERS
+                        </p>
                         {team.members.map((member) => (
-                          <div key={member.name} className="flex items-center justify-between rounded-xl p-2 hover:bg-muted/50">
+                          <div key={member.name} className="flex items-center justify-between rounded-xl p-2 hover:bg-muted/50 transition-colors">
                             <div className="flex items-center gap-3">
                               <Avatar className="h-8 w-8">
-                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                                   {member.initials}
                                 </AvatarFallback>
                               </Avatar>
                               <div>
-                                <p className="text-sm font-medium">{member.name}</p>
-                                <div className="flex items-center gap-1.5">
+                                <p className="text-[12px] font-semibold">{member.name}</p>
+                                <Badge variant="outline" className="gap-1 text-[9px] h-4 mt-0.5">
                                   {member.isLeader ? (
-                                    <Badge variant="outline" className="gap-1 text-[10px] h-5 border-primary/30 text-primary">
-                                      <Crown className="h-3 w-3" /> Team Leader
-                                    </Badge>
+                                    <>
+                                      <Crown className="h-2.5 w-2.5 text-primary" /> Leader
+                                    </>
                                   ) : (
-                                    <Badge variant="outline" className="gap-1 text-[10px] h-5">
-                                      <Shield className="h-3 w-3" /> Member
-                                    </Badge>
+                                    <>
+                                      <Shield className="h-2.5 w-2.5" /> Member
+                                    </>
                                   )}
-                                </div>
+                                </Badge>
                               </div>
                             </div>
                             {!member.isLeader && (
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-7 gap-1 text-xs text-muted-foreground hover:text-destructive"
+                                className="h-6 gap-1 text-[10px] text-muted-foreground hover:text-destructive"
                                 onClick={() => setRemoveMember({ teamName: team.name, memberName: member.name })}
                               >
-                                <UserMinus className="h-3 w-3" /> Remove
+                                <UserMinus className="h-3 w-3" />
                               </Button>
                             )}
                           </div>
@@ -356,11 +565,12 @@ export default function Dashboard() {
                   )}
                 </AnimatePresence>
               </motion.div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </motion.div>
 
+      {/* Modals / Drawers */}
       <MemberProfileDrawer member={selectedMember} open={drawerOpen} onOpenChange={setDrawerOpen} />
 
       {editTeam && (
@@ -371,13 +581,14 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Remove Member Confirmation */}
       <Dialog open={!!removeMember} onOpenChange={(open) => !open && setRemoveMember(null)}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>Remove Member</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove <span className="font-semibold text-foreground">{removeMember?.memberName}</span> from <span className="font-semibold text-foreground">{removeMember?.teamName}</span>? This action cannot be undone.
+              Are you sure you want to remove{" "}
+              <span className="font-semibold text-foreground">{removeMember?.memberName}</span> from{" "}
+              <span className="font-semibold text-foreground">{removeMember?.teamName}</span>?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
