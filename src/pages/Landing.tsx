@@ -6,19 +6,18 @@ import FeaturedCompetitions from "@/components/landing/FeaturedCompetitions";
 import CTASection from "@/components/landing/CTASection";
 import FooterSection from "@/components/landing/FooterSection";
 import HallOfFame from "@/components/landing/HallOfFame";
+import TestimonialsSection from "@/components/landing/TestimonialsSection";
 
 export default function Landing() {
   return (
     <div className="overflow-hidden custom-scrollbar space-y-0">
       <HeroSection />
       <MarqueeSection />
-      <div className="py-4" />
-      <StatsSection />
       <HowItWorks />
-      <div className="py-4" />
+      <StatsSection />
       <FeaturedCompetitions />
-      <div className="py-4" />
       <HallOfFame />
+      <TestimonialsSection />
       <CTASection />
       <FooterSection />
     </div>
